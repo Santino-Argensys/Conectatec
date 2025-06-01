@@ -10,7 +10,11 @@ app.use(express.json());
 app.get('/', (req, res) => {
   res.send('API funcionando');
 });
+app.use(express.static(path.join(__dirname, '../frontend')));
 
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend', 'index.html'));
+});
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => console.log(`Servidor corriendo en puerto ${PORT}`));
 
