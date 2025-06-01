@@ -1,0 +1,491 @@
+:root {
+    --primary: #46236b;    /* Morado exacto del logo */
+    --primary-light: #674093;
+    --accent: #f6f4fa;     /* Fondo sutil violeta grisáceo */
+    --gray: #f4f7fa;
+    --text: #23233a;
+    --header: #fff;
+    --shadow: 0 2px 12px 0 #9e97be1a;
+    --radius: 1.1rem;
+    --transition: .18s cubic-bezier(.4,0,.2,1);
+}
+
+html, body {
+    font-family: 'Inter', 'Montserrat', Arial, sans-serif;
+    background: var(--gray);
+    color: var(--text);
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+}
+
+header {
+    background: var(--header);
+    box-shadow: var(--shadow);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+.acceso-bg {
+    background: linear-gradient(115deg, #f6f4fa 40%, #46236b22 100%);
+    min-height: 100vh;
+    margin: 0;
+}
+.acceso-container {
+    max-width: 360px;
+    margin: 70px auto 0 auto;
+    background: #fff;
+    padding: 38px 34px 26px 34px;
+    border-radius: 1.3rem;
+    box-shadow: 0 6px 44px #46236b18;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.hidden { display: none; }
+.container.header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 12px 24px;
+}
+.logo-area {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.logo-img {
+    width: 48px;
+    height: 48px;
+    border-radius: 16px;
+    background: var(--primary);
+}
+.brand {
+    font-size: 1.45rem;
+    font-weight: 800;
+    letter-spacing: 0.03em;
+    color: var(--primary);
+    font-family: 'Montserrat', Arial, sans-serif;
+}
+nav a {
+    color: var(--text);
+    text-decoration: none;
+    margin-left: 18px;
+    font-weight: 500;
+    font-size: 1.06rem;
+    transition: color var(--transition);
+    position: relative;
+}
+nav a.active, nav a:hover {
+    color: var(--primary);
+}
+nav a.logout-btn {
+    color: #fff;
+    background: var(--primary);
+    border-radius: var(--radius);
+    padding: 6px 20px;
+    margin-left: 24px;
+    font-weight: 700;
+    transition: background var(--transition);
+}
+nav a.logout-btn:hover {
+    background: #008ccf;
+}
+
+/* LANDING */
+.landing {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 32px;
+    padding: 56px 0 32px 0;
+    background: var(--accent);
+    min-height: 340px;
+}
+.landing-content {
+    max-width: 440px;
+}
+.landing-content h1 {
+    font-size: 2.1rem;
+    font-weight: 800;
+    margin-bottom: 0.7em;
+    color: var(--primary);
+    font-family: 'Montserrat', Arial, sans-serif;
+}
+.landing-content p {
+    font-size: 1.15rem;
+    margin-bottom: 1.5em;
+    color: #425265;
+    font-weight: 400;
+}
+.primary-btn {
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    font-size: 1.1rem;
+    padding: 13px 40px;
+    border-radius: var(--radius);
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 8px 0 #a3c8ee38;
+    transition: background var(--transition);
+}
+.primary-btn:hover {
+    background: var(--primary-light);
+}
+.landing-img {
+    max-width: 320px;
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    background: #fff;
+}
+.landing-banner {
+    width: 440px;
+    max-width: 99vw;
+    min-width: 210px;
+    border-radius: 1.5em;
+     box-shadow: 0 8px 36px #46236b18;
+    margin-top: 10px;
+    background: #fff;
+}
+.landing {
+    align-items: flex-start; /* Así el texto queda centrado verticalmente respecto al banner */
+}
+
+.landing {
+    align-items: center;
+}
+/* MODAL */
+.modal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 200;
+    background: #14192b2a;
+    transition: opacity var(--transition);
+}
+.modal.hidden {
+    display: none;
+}
+.modal-content {
+    background: #fff;
+    padding: 2.5rem 2.2rem 1.6rem 2.2rem;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    max-width: 390px;
+    width: 98%;
+    position: relative;
+}
+.login-modal h2 {
+    margin-top: 0;
+    font-weight: 700;
+    font-size: 1.4rem;
+}
+.modal-content label {
+    font-weight: 600;
+    margin-top: 0.7em;
+    display: block;
+    color: #284268;
+}
+.modal-content input {
+    width: 100%;
+    padding: 9px 14px;
+    border: 1px solid #d1e2ee;
+    margin-top: 0.1em;
+    margin-bottom: 1.2em;
+    border-radius: .6em;
+    font-size: 1rem;
+    background: #f8fcff;
+}
+.close {
+    position: absolute;
+    top: 12px;
+    right: 20px;
+    font-size: 1.6em;
+    color: #999;
+    cursor: pointer;
+}
+
+/* LISTADO DE ALUMNOS */
+.alumnos-header {
+    max-width: 1080px;
+    margin: 32px auto 12px auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 18px;
+    flex-wrap: wrap;
+    padding: 0 14px;
+}
+.alumnos-header h2 {
+    margin: 0;
+    font-family: 'Montserrat', Arial, sans-serif;
+    font-size: 1.2rem;
+    color: var(--primary);
+    font-weight: 700;
+}
+#busquedaAlumno {
+    padding: 9px 14px;
+    border-radius: .7em;
+    border: 1px solid #d1e2ee;
+    min-width: 260px;
+    background: #fff;
+    font-size: 1rem;
+    box-shadow: 0 2px 4px #88c2eb0f;
+}
+.alumnos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+    gap: 24px;
+    max-width: 1100px;
+    margin: 0 auto 48px auto;
+    padding: 0 14px;
+}
+.alumno-card {
+    background: #fff;
+    border-radius: var(--radius);
+    box-shadow: 0 1px 8px 0 #b3dcfa1c;
+    padding: 22px 20px 16px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: box-shadow var(--transition), transform var(--transition);
+    cursor: pointer;
+    position: relative;
+}
+.alumno-card:hover {
+    box-shadow: 0 6px 24px 0 #63b8eb35;
+    transform: translateY(-2px) scale(1.03);
+}
+.alumno-card img {
+    width: 82px;
+    height: 82px;
+    border-radius: 100px;
+    margin-bottom: 0.8em;
+    border: 2.5px solid var(--primary);
+    background: #f3f9ff;
+}
+.alumno-card .alumno-nombre {
+    font-size: 1.13rem;
+    font-weight: 700;
+    color: var(--primary-light);
+    margin-bottom: 2px;
+}
+.alumno-card .alumno-carrera {
+    color: var(--primary-light);
+    font-weight: 500;
+    margin-bottom: 5px;
+    font-size: 0.97rem;
+}
+.alumno-card .alumno-descripcion {
+    color: #57697a;
+    font-size: 0.98rem;
+    margin-bottom: 11px;
+    min-height: 32px;
+}
+.alumno-card .ver-perfil-btn {
+    margin-top: 0.7em;
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    padding: 8px 22px;
+    border-radius: 2em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background var(--transition);
+    font-size: 1rem;
+}
+.alumno-card .ver-perfil-btn:hover {
+    background: #0086c1;
+}
+
+/* MODAL PERFIL */
+.perfil-modal {
+    max-width: 400px;
+    width: 98%;
+    text-align: center;
+    padding: 2.2em 2em;
+}
+.perfil-modal img {
+    width: 98px;
+    height: 98px;
+    border-radius: 100px;
+    margin-bottom: 1.2em;
+    border: 2.5px solid var(--primary);
+    background: #f3f9ff;
+}
+.perfil-modal h3 {
+    margin-bottom: 0.2em;
+    color: var(--primary);
+    font-weight: 800;
+    font-size: 1.27em;
+    font-family: 'Montserrat', Arial, sans-serif;
+}
+.perfil-modal .perfil-carrera {
+    color: #2e527a;
+    font-weight: 600;
+    margin-bottom: 0.6em;
+}
+.perfil-modal .perfil-descripcion {
+    color: #4a5b69;
+    margin-bottom: 1.1em;
+}
+.perfil-modal .perfil-telefono, .perfil-modal .perfil-email {
+    color: #16507a;
+    font-size: 1.01em;
+    margin-bottom: 0.3em;
+    display: block;
+    font-weight: 600;
+}
+
+/* FOOTER */
+footer {
+    background: #eaf4fb;
+    padding: 14px 0;
+    text-align: center;
+    color: #416b88;
+    font-size: 0.99rem;
+}
+
+/* RESPONSIVE */
+@media (max-width: 720px) {
+    .landing { flex-direction: column; gap: 12px; padding: 24px 0 16px 0; }
+    .alumnos-header { flex-direction: column; gap: 12px; align-items: stretch; }
+    .container.header-flex { flex-direction: column; gap: 10px; padding: 10px 10px; }
+    .logo-img { width: 38px; height: 38px; }
+    .perfil-modal { padding: 1.2em 0.7em; }
+    .alumnos-grid { padding: 0 2px; }
+}
+
+.acceso-bg {
+    background: linear-gradient(115deg, #f6f4fa 40%, #46236b10 100%);
+    min-height: 100vh;
+    margin: 0;
+}
+.acceso-container {
+    max-width: 370px;
+    margin: 58px auto 0 auto;
+    background: #fff;
+    padding: 38px 34px 32px 34px;
+    border-radius: 1.3rem;
+    box-shadow: 0 8px 44px #46236b19;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 440px;
+    position: relative;
+}
+.acceso-logo {
+    height: 56px;
+    width: auto;
+    margin-bottom: 16px;
+    border-radius: 18px;
+    box-shadow: 0 2px 18px #46236b1c;
+    background: #46236b;
+    padding: 10px;
+}
+.acceso-titulo {
+    margin-bottom: 20px;
+    font-family: 'Montserrat', Arial, sans-serif;
+    font-weight: 800;
+    font-size: 1.45em;
+    color: #231442;
+    text-align: center;
+}
+.acceso-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 4px;
+}
+.acceso-form input {
+    padding: 12px 14px;
+    border: 1.5px solid #e0def4;
+    border-radius: 1em;
+    font-size: 1.07em;
+    background: #f6f4fa;
+    margin-bottom: 1px;
+    transition: border-color .2s;
+}
+.acceso-form input:focus {
+    border-color: var(--primary);
+    outline: none;
+}
+.acceso-btn {
+    margin-top: 8px;
+    width: 100%;
+    font-size: 1.1em;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    background: var(--primary);
+    border-radius: 1.2em;
+    transition: background .17s;
+}
+.acceso-btn:hover {
+    background: var(--primary-light);
+}
+.acceso-link {
+    margin: 18px 0 0 0;
+    text-align: center;
+    font-size: 1em;
+}
+.acceso-link a {
+    color: var(--primary);
+    text-decoration: underline;
+    font-weight: 700;
+    cursor: pointer;
+}
+.acceso-msg {
+    margin-top: 6px;
+    min-height: 20px;
+    font-size: 0.99em;
+    text-align: center;
+}
+@media (max-width: 530px) {
+    .acceso-container {
+        padding: 18px 8vw 18px 8vw;
+        min-width: 0;
+        max-width: 99vw;
+    }
+}
+
+.perfil-main {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+}
+.perfil-section {
+    background: #fff;
+    padding: 32px 26px;
+    border-radius: 1.3rem;
+    box-shadow: 0 4px 24px #46236b18;
+    width: 100%;
+    max-width: 420px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+#perfilForm input {
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 12px 14px;
+    border-radius: 1em;
+    border: 1.3px solid #e0def4;
+    background: #f6f4fa;
+}
+#perfilForm button {
+    width: 100%;
+}
+#perfilMsg {
+    margin-top: 10px;
+    text-align: center;
+}
