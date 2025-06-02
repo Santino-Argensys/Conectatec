@@ -8,22 +8,14 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Endpoint de prueba (para saber si el server funciona)
 app.get('/', (req, res) => {
   res.send('API funcionando');
 });
 
-app.use(express.static(path.join(__dirname, '../frontend')));
+// ----- ENDPOINTS API ----- //
 
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend', 'index.html'));
-});
-
-const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => console.log(`Servidor corriendo en puerto ${PORT}`));
-
-// ... arriba ya tenés el require y configuración
-
-// Registro de alumno
+// Login de alumno
 app.post('/api/alumnos/login', async (req, res) => {
   const { email, password } = req.body;
   try {
@@ -41,6 +33,7 @@ app.post('/api/alumnos/login', async (req, res) => {
   }
 });
 
+// Registro de alumno
 app.post('/api/alumnos/registro', async (req, res) => {
   const { nombre, apellido, email, password, carrera, descripcion, telefono } = req.body;
   try {
@@ -132,17 +125,19 @@ app.get('/api/alumnos', async (req, res) => {
   }
 });
 
-// Actualizar perfil de alumno
-app.put('/api/alumnos/:id', async (req, res) => {
-  const { nombre, apellido, carrera, descripcion, telefono } = req.body;
-  const { id } = req.params;
-  try {
-    await db.query(
-      'UPDATE alumnos SET nombre=$1, apellido=$2, carrera=$3, descripcion=$4, telefono=$5 WHERE id=$6',
-      [nombre, apellido, carrera, descripcion, telefono, id]
-    );
-    res.json({ message: "Perfil actualizado correctamente" });
-  } catch (error) {
-    res.status(500).json({ error: "Error al actualizar perfil" });
-  }
+// (El endpoint de actualizar perfil está repetido, lo eliminé para evitar conflictos)
+
+// ----- SERVIR FRONTEND ----- //
+
+// Archivos estáticos
+app.use(express.static(path.join(__dirname, '../frontend')));
+
+// Redirigir todas las rutas no-API al frontend (SPA)
+app.get(/^\/(?!api).*/, (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend', 'index.html'));
 });
+
+// ----- LEVANTAR SERVER ----- //
+
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => console.log(`Servidor corriendo en puerto ${PORT}`));
