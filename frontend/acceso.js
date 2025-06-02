@@ -1,4 +1,4 @@
- // LOGIN
+// LOGIN
 document.getElementById('loginForm').addEventListener('submit', async function(e){
     e.preventDefault();
     const email = document.getElementById('loginEmail').value.trim();
@@ -6,13 +6,18 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
     const mensaje = document.getElementById('loginMessage');
     mensaje.textContent = "";
 
+    console.log("Intentando login con:", { email, pass }); // LOG: datos enviados
+
     try {
         const response = await fetch('https://conectatec-1.onrender.com/api/alumnos/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password: pass })
         });
+        console.log("Respuesta recibida del backend:", response); // LOG: response crudo
+
         const data = await response.json();
+        console.log("Body JSON recibido:", data); // LOG: body de la respuesta
 
         if (response.ok) {
             // Guardar sesión
@@ -23,6 +28,7 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
             mensaje.style.color = "#d00";
         }
     } catch (err) {
+        console.error("Error en fetch login:", err); // LOG: error de red o fetch
         mensaje.textContent = "Error de conexión al servidor.";
         mensaje.style.color = "#d00";
     }
@@ -53,20 +59,24 @@ document.getElementById('registerForm').addEventListener('submit', async functio
     const mensaje = document.getElementById('registerMessage');
     mensaje.textContent = "";
 
+    console.log("Intentando registrar:", { nombre, apellido, email, password, carrera, descripcion, telefono });
+
     if (!nombre || !apellido || !email || !password || !carrera) {
         mensaje.textContent = "Completá todos los campos obligatorios.";
         mensaje.style.color = "#d00";
         return;
     }
-   
-});
+
     try {
         const response = await fetch('https://conectatec-1.onrender.com/api/alumnos/registro', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ nombre, apellido, email, password, carrera, descripcion, telefono })
         });
+        console.log("Respuesta recibida del backend en registro:", response);
+
         const data = await response.json();
+        console.log("Body JSON recibido en registro:", data);
 
         if (response.ok) {
             mensaje.textContent = "¡Registro exitoso! Ya podés iniciar sesión.";
@@ -79,6 +89,7 @@ document.getElementById('registerForm').addEventListener('submit', async functio
             mensaje.style.color = "#d00";
         }
     } catch (err) {
+        console.error("Error en fetch registro:", err);
         mensaje.textContent = "Error de conexión al servidor.";
         mensaje.style.color = "#d00";
     }
