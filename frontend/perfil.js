@@ -10,7 +10,7 @@ const msg = document.getElementById('perfilMsg');
 // Cargar datos actuales
 async function cargarPerfil() {
     try {
-        const response = await fetch(`http://localhost:3001/api/alumnos/${user.id}`);
+        const response = await fetch(`https://conectatec-1.onrender.com/api/alumnos/${user.id}`);
         const alumno = await response.json();
         document.getElementById('nombre').value = alumno.nombre || '';
         document.getElementById('apellido').value = alumno.apellido || '';
@@ -34,7 +34,7 @@ form.addEventListener('submit', async function(e){
     const telefono = document.getElementById('telefono').value.trim();
 
     try {
-        const response = await fetch(`http://localhost:3001/api/alumnos/${user.id}`, {
+        const response = await fetch(`https://conectatec-1.onrender.com/api/alumnos/${user.id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ nombre, apellido, carrera, descripcion, telefono })
