@@ -13,6 +13,11 @@ app.get('/', (req, res) => {
   res.send('API funcionando');
 });
 
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl}`);
+  next();
+});
+
 // ----- ENDPOINTS API ----- //
 
 // Login de alumno
