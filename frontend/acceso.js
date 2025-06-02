@@ -1,4 +1,4 @@
-// LOGIN
+ // LOGIN
 document.getElementById('loginForm').addEventListener('submit', async function(e){
     e.preventDefault();
     const email = document.getElementById('loginEmail').value.trim();
@@ -58,7 +58,10 @@ document.getElementById('registerForm').addEventListener('submit', async functio
         mensaje.style.color = "#d00";
         return;
     }
-
+    app.post('/api/alumnos/login', async (req, res) => {
+  console.log("Login POST recibido. Body:", req.body);
+  // ... tu código
+});
     try {
         const response = await fetch('https://conectatec-1.onrender.com/api/alumnos/registro', {
             method: 'POST',
