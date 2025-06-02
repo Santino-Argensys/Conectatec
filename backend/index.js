@@ -16,6 +16,7 @@ app.get('/', (req, res) => {
 // ----- ENDPOINTS API ----- //
 
 // Login de alumno
+// Login de alumno
 app.post('/api/alumnos/login', async (req, res) => {
   const { email, password } = req.body;
   try {
@@ -29,6 +30,8 @@ app.post('/api/alumnos/login', async (req, res) => {
       res.status(401).json({ error: "Credenciales incorrectas" });
     }
   } catch (error) {
+    // ====> LOG DEL ERROR REAL <====
+    console.log("Error real al iniciar sesión:", error);
     res.status(500).json({ error: "Error interno al iniciar sesión" });
   }
 });
