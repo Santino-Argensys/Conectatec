@@ -7,7 +7,7 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
     mensaje.textContent = "";
 
     try {
-        const response = await fetch('http://localhost:3001/api/alumnos/login', {
+        const response = await fetch('https://conectatec-1.onrender.com/api/alumnos/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password: pass })
@@ -60,7 +60,7 @@ document.getElementById('registerForm').addEventListener('submit', async functio
     }
 
     try {
-        const response = await fetch('http://localhost:3001/api/alumnos/registro', {
+        const response = await fetch('https://conectatec-1.onrender.com/api/alumnos/registro', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ nombre, apellido, email, password, carrera, descripcion, telefono })
