@@ -1,7 +1,7 @@
 // Función para obtener los alumnos desde el backend y mostrarlos
 async function fetchAlumnos() {
     try {
-        const response = await fetch('http://localhost:3001/api/alumnos');
+        const response = await fetch('https://conectatec-1.onrender.com/api/alumnos');
         if (!response.ok) throw new Error('Error al obtener alumnos');
         const alumnos = await response.json();
 
@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const val = e.target.value.toLowerCase();
         if (!alumnosGlobal.length) {
             try {
-                const response = await fetch('http://localhost:3001/api/alumnos');
+                const response = await fetch('https://conectatec-1.onrender.com/api/alumnos');
                 alumnosGlobal = await response.json();
             } catch { return; }
         }
@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
         mensaje.textContent = "";
 
         try {
-            const response = await fetch('http://localhost:3001/api/alumnos/login', {
+            const response = await fetch('https://conectatec-1.onrender.com/api/alumnos/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password: pass })
