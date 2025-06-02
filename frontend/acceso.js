@@ -58,23 +58,7 @@ document.getElementById('registerForm').addEventListener('submit', async functio
         mensaje.style.color = "#d00";
         return;
     }
-   app.post('/api/alumnos/login', async (req, res) => {
-  const { email, password } = req.body;
-  try {
-    const result = await db.query(
-      'SELECT id, nombre, apellido, email, carrera, descripcion, telefono FROM alumnos WHERE email = $1 AND password = $2',
-      [email, password]
-    );
-    if (result.rows.length > 0) {
-      res.json({ user: result.rows[0], tipo: "alumno" });
-    } else {
-      res.status(401).json({ error: "Credenciales incorrectas" });
-    }
-  } catch (error) {
-    console.log("Error en /api/alumnos/login:", error); // <-- Agregá esta línea
-    res.status(500).json({ error: "Error interno al iniciar sesión" });
-  }
-});
+   
 });
     try {
         const response = await fetch('https://conectatec-1.onrender.com/api/alumnos/registro', {
@@ -98,4 +82,21 @@ document.getElementById('registerForm').addEventListener('submit', async functio
         mensaje.textContent = "Error de conexión al servidor.";
         mensaje.style.color = "#d00";
     }
+app.post('/api/alumnos/login', async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const result = await db.query(
+      'SELECT id, nombre, apellido, email, carrera, descripcion, telefono FROM alumnos WHERE email = $1 AND password = $2',
+      [email, password]
+    );
+    if (result.rows.length > 0) {
+      res.json({ user: result.rows[0], tipo: "alumno" });
+    } else {
+      res.status(401).json({ error: "Credenciales incorrectas" });
+    }
+  } catch (error) {
+    console.log("Error en /api/alumnos/login:", error); // <-- Agregá esta línea
+    res.status(500).json({ error: "Error interno al iniciar sesión" });
+  }
+});
 });
