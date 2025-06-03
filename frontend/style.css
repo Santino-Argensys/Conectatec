@@ -520,16 +520,136 @@ footer {
     }
 
     /* Acceso */
-    .acceso-container {
-        padding: 18px 8vw;
-        max-width: 99vw;
-    }
-    .acceso-titulo {
-        font-size: 1.2rem;
-    }
-    .acceso-form input,
-    .acceso-form button {
-        font-size: 0.9rem;
-        padding: 10px 12px;
-    }
+    /* Contenedor general de la página de acceso (ya lo tenías así) */
+.acceso-bg {
+  background: linear-gradient(115deg, #f6f4fa 40%, #46236b22 100%);
+  min-height: 100vh;
+  margin: 0;
+}
+
+.acceso-container {
+  max-width: 360px;
+  width: 90%;
+  margin: 70px auto 0 auto;
+  background: #fff;
+  padding: 38px 34px 26px 34px;
+  border-radius: 1.3rem;
+  box-shadow: 0 6px 44px #46236b18;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.acceso-logo {
+  height: 56px;
+  width: auto;
+  margin-bottom: 16px;
+  border-radius: 18px;
+  box-shadow: 0 2px 18px #46236b1c;
+  background: #46236b;
+  padding: 10px;
+}
+
+.acceso-titulo {
+  margin-bottom: 20px;
+  font-family: 'Montserrat', Arial, sans-serif;
+  font-weight: 800;
+  font-size: 1.45em;
+  color: #231442;
+  text-align: center;
+}
+
+/* ================================
+   Aquí está la parte CLAVE: apilar
+   inputs y botón en vertical
+   ================================ */
+.acceso-form {
+  display: flex;
+  flex-direction: column;  /* Fuerza apilamiento vertical */
+  gap: 14px;               /* Espacio entre cada input y botón */
+  width: 100%;             /* Que ocupe todo el ancho del contenedor */
+  margin-bottom: 4px;
+}
+
+.acceso-form input {
+  display: block;         /* Forzar que sea bloque */
+  width: 100%;            /* Ocupar el 100% del contenedor */
+  padding: 12px 14px;
+  border: 1.5px solid #e0def4;
+  border-radius: 1em;
+  font-size: 1.07em;
+  background: #f6f4fa;
+  transition: border-color .2s;
+}
+
+.acceso-form input:focus {
+  border-color: var(--primary);
+  outline: none;
+}
+
+.acceso-btn {
+  /* Hacemos que el botón también sea bloque y ancho completo */
+  display: block;
+  width: 100%;
+  margin-top: 8px;
+  font-size: 1.1em;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  padding: 14px 0;         /* Padding vertical suficiente */
+  border-radius: 1.2em;
+  cursor: pointer;
+  text-align: center;
+  transition: background .17s;
+}
+
+.acceso-btn:hover {
+  background: var(--primary-light);
+}
+
+.acceso-link {
+  margin: 18px 0 0 0;
+  text-align: center;
+  font-size: 1em;
+}
+
+.acceso-link a {
+  color: var(--primary);
+  text-decoration: underline;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.acceso-msg {
+  margin-top: 6px;
+  min-height: 20px;
+  font-size: 0.99em;
+  text-align: center;
+}
+
+/* ============
+   RESPONSIVE
+   ============ */
+@media (max-width: 530px) {
+  .acceso-container {
+    padding: 18px 8vw;
+    min-width: 0;
+    max-width: 99vw;
+  }
+}
+
+@media (max-width: 480px) {
+  .acceso-container {
+    padding: 20px 16px 20px 16px;
+  }
+  .acceso-titulo {
+    font-size: 1.25rem;
+  }
+  .acceso-form input,
+  .acceso-form button {
+    font-size: 0.95rem;
+    padding: 10px 14px;
+  }
 }
