@@ -519,81 +519,105 @@ footer {
         padding: 0 8px;
     }
 
-   gue estos pasos:
+  /* ==============================
+   SECCIÓN “Acceso” (acceso.html)
+   ============================== */
 
-Abre frontend/style.css.
+/* 1) Fondo y contenedor principal */
+.acceso-bg {
+  background: linear-gradient(115deg, #f6f4fa 40%, #46236b22 100%);
+  min-height: 100vh;
+  margin: 0;
+}
 
-Busca todas las reglas que afectan a .acceso-form, .acceso-form input y .acceso-btn. Comenta o elimina esas tres reglas (para evitar conflictos).
+.acceso-container {
+  max-width: 360px;
+  width: 90%;
+  margin: 70px auto 0 auto;
+  background: #fff;
+  padding: 38px 34px 26px 34px;
+  border-radius: 1.3rem;
+  box-shadow: 0 6px 44px #46236b18;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-Al final del archivo, pega exactamente este bloque NUEVO (contiene selectores más específicos) para “forzar” el comportamiento vertical de los inputs y el botón:
+/* 2) Logo encima del formulario */
+.acceso-logo {
+  height: 56px;
+  width: auto;
+  margin-bottom: 16px;
+  border-radius: 18px;
+  box-shadow: 0 2px 18px #46236b1c;
+  background: #46236b;
+  padding: 10px;
+}
 
-css
-Copiar
-Editar
-/* =============================================
-   SECCIÓN ACCESO (acceso.html): form apilado
-   ============================================= */
+/* 3) Título “Ingresá a Conectatec” */
+.acceso-titulo {
+  margin-bottom: 20px;
+  font-family: 'Montserrat', Arial, sans-serif;
+  font-weight: 800;
+  font-size: 1.45em;
+  color: #231442;
+  text-align: center;
+}
 
-/* 1) Nos aseguramos de que el contenedor de todo el formulario
-      lleve la clase .acceso-form y/o el id #loginForm */
-#accesoForm,
+/* 4) Formulario: forzar apilamiento vertical */
 .acceso-form {
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 14px !important;      /* espacio vertical entre cada input/botón */
-  width: 100% !important;    /* que ocupe todo el ancho de su contenedor padre */
-  margin-bottom: 4px !important;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;         /* Espacio vertical entre cada campo y el botón */
+  width: 100%;       /* Que ocupe todo el ancho del contenedor (.acceso-container) */
+  margin-bottom: 4px;
 }
 
-/* 2) INPUTS: que siempre sean bloques y ocupen 100% dentro de .acceso-form */
-#accesoForm input,
+/* 5) Inputs del formulario: mostrar como bloque y ocupar 100% */
 .acceso-form input {
-  display: block !important;
-  width: 100% !important;
-  padding: 12px 14px !important;
-  border: 1.5px solid #e0def4 !important;
-  border-radius: 1em !important;
-  font-size: 1.07em !important;
-  background: #f6f4fa !important;
-  transition: border-color .2s !important;
-  box-sizing: border-box !important;
+  display: block;
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid #e0def4;
+  border-radius: 1em;
+  font-size: 1.07em;
+  background: #f6f4fa;
+  transition: border-color .2s;
+  box-sizing: border-box;
+  /* Nota: eliminamos el “margin-bottom: 1px” para no romper el gap de 14px */
 }
 
-/* 3) Al hacer foco en un input, que cambie su borde */
-#accesoForm input:focus,
+/* 6) Focus sobre inputs */
 .acceso-form input:focus {
-  border-color: var(--primary) !important;
-  outline: none !important;
+  border-color: var(--primary);
+  outline: none;
 }
 
-/* 4) BOTÓN DE INICIAR SESIÓN (y REGISTRARME):
-      también queremos forzarlo a bloque de ancho completo */
-#accesoForm button,
-.acceso-form button {
-  display: block !important;
-  width: 100% !important;
-  margin-top: 8px !important;
-  font-size: 1.1em !important;
-  font-weight: 700 !important;
-  letter-spacing: 0.01em !important;
-  background: var(--primary) !important;
-  color: #fff !important;
-  border: none !important;
-  padding: 14px 0 !important;    /* padding vertical; ya no necesita padding horizontal */
-  border-radius: 1.2em !important;
-  cursor: pointer !important;
-  text-align: center !important;
-  transition: background .17s !important;
-  box-sizing: border-box !important;
+/* 7) Botón “Iniciar sesión” o “Registrarme”: también bloque y ancho completo */
+.acceso-btn {
+  display: block;
+  width: 100%;
+  margin-top: 8px;
+  font-size: 1.1em;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  padding: 14px 0;       /* Padding vertical para que se vea “grueso” y cómodo de tocar */
+  border-radius: 1.2em;
+  cursor: pointer;
+  text-align: center;
+  transition: background .17s;
+  box-sizing: border-box;
 }
 
-/* 5) Hover sobre el botón */
-#accesoForm button:hover,
-.acceso-form button:hover {
-  background: var(--primary-light) !important;
+/* 8) Hover del botón */
+.acceso-btn:hover {
+  background: var(--primary-light);
 }
 
-/* 6) Texto de “¿No tenés cuenta?” */
+/* 9) Enlace “¿No tenés cuenta? Regístrate aquí” */
 .acceso-link {
   margin: 18px 0 0 0;
   text-align: center;
@@ -607,7 +631,7 @@ Editar
   cursor: pointer;
 }
 
-/* 7) Mensaje de error/success debajo del formulario */
+/* 10) Mensaje de error/success debajo del formulario */
 .acceso-msg {
   margin-top: 6px;
   min-height: 20px;
@@ -615,12 +639,12 @@ Editar
   text-align: center;
 }
 
-/* =====================
-   AJUSTES RESPONSIVE
-   ===================== */
+/* ================
+   Ajustes Responsive
+   ================ */
 @media (max-width: 530px) {
   .acceso-container {
-    padding: 18px 8vw !important;
+    padding: 18px 8vw;
     min-width: 0;
     max-width: 99vw;
   }
@@ -628,14 +652,14 @@ Editar
 
 @media (max-width: 480px) {
   .acceso-container {
-    padding: 20px 16px 20px 16px !important;
+    padding: 20px 16px 20px 16px;
   }
   .acceso-titulo {
-    font-size: 1.25rem !important;
+    font-size: 1.25rem;
   }
-  #loginForm input,
-  #loginForm button {
-    font-size: 0.95rem !important;
-    padding: 10px 14px !important;
+  .acceso-form input,
+  .acceso-form button {
+    font-size: 0.95rem;
+    padding: 10px 14px;
   }
 }
