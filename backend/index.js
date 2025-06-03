@@ -8,19 +8,23 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Endpoint de prueba (para saber si el server funciona)
-app.get('/', (req, res) => {
-  res.send('API funcionando');
-});
+// ------------------------------------------------------
+// 1. SERVIR ARCHIVOS ESTÁTICOS DE frontend/
+// ------------------------------------------------------
+app.use(express.static(path.join(__dirname, '../frontend')));
 
+// ------------------------------------------------------
+// 2. LOG DE PETICIONES (mantenimiento)
+// ------------------------------------------------------
 app.use((req, res, next) => {
   console.log(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl}`);
   next();
 });
 
-// ----- ENDPOINTS API ----- //
+// ------------------------------------------------------
+// 3. ENDPOINTS API (prefijo "/api") 
+// ------------------------------------------------------
 
-// Login de alumno
 // Login de alumno
 app.post('/api/alumnos/login', async (req, res) => {
   const { email, password } = req.body;
@@ -35,7 +39,6 @@ app.post('/api/alumnos/login', async (req, res) => {
       res.status(401).json({ error: "Credenciales incorrectas" });
     }
   } catch (error) {
-    // ====> LOG DEL ERROR REAL <====
     console.log("Error real al iniciar sesión:", error);
     res.status(500).json({ error: "Error interno al iniciar sesión" });
   }
@@ -133,19 +136,17 @@ app.get('/api/alumnos', async (req, res) => {
   }
 });
 
-// (El endpoint de actualizar perfil está repetido, lo eliminé para evitar conflictos)
-
-// ----- SERVIR FRONTEND ----- //
-
-// Archivos estáticos
-app.use(express.static(path.join(__dirname, '../frontend')));
-
-// Redirigir todas las rutas no-API al frontend (SPA)
+// ------------------------------------------------------
+// 4. CATCH-ALL PARA RUTAS NO-API (SPA)
+// ------------------------------------------------------
+// Cualquier ruta que no empiece con "/api" devolverá index.html
+// para que el frontend maneje el ruteo del lado del cliente.
 app.get(/^\/(?!api).*/, (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend', 'index.html'));
 });
 
-// ----- LEVANTAR SERVER ----- //
-
+// ------------------------------------------------------
+// 5. LEVANTAR SERVER
+// ------------------------------------------------------
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => console.log(`Servidor corriendo en puerto ${PORT}`));
