@@ -8,7 +8,7 @@ async function fetchAlumnos() {
         // Si tu backend devuelve alumnos sin foto, agregamos una imagen genérica
         const alumnosConFoto = alumnos.map((alumno, idx) => ({
             ...alumno,
-            img: alumno.img || (idx % 2 === 0 ? "student_placeholder_male.svg" : "student_placeholder_female.svg")
+            img: alumno.img || (idx % 2 === 0 ? "img/student_placeholder_male.svg" : "img/student_placeholder_female.svg")
         }));
 
         renderAlumnosGrid(alumnosConFoto);
