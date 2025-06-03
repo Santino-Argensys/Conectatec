@@ -21,10 +21,11 @@ html, body {
 
 header {
     background: var(--header);
-    box-shadow: var(--shadow);
     position: sticky;
     top: 0;
     z-index: 50;
+    background-color: #fff;
+ box-shadow: 0 2px 6px rgba(0,0,0,0.1)
 }
 .acceso-bg {
     background: linear-gradient(115deg, #f6f4fa 40%, #46236b22 100%);
@@ -47,11 +48,14 @@ header {
 .hidden { display: none; }
 .container.header-flex {
     display: flex;
+    flex-wrap: wrap;       
     justify-content: space-between;
     align-items: center;
-    max-width: 1080px;
+    max-width: 1080px;     
+    width: 90%;             
     margin: 0 auto;
-    padding: 12px 24px;
+    padding: 12px 0;        
+}
 }
 .logo-area {
     display: flex;
@@ -71,14 +75,20 @@ header {
     color: var(--primary);
     font-family: 'Montserrat', Arial, sans-serif;
 }
-nav a {
-    color: var(--text);
-    text-decoration: none;
-    margin-left: 18px;
-    font-weight: 500;
-    font-size: 1.06rem;
-    transition: color var(--transition);
-    position: relative;
+@media (max-width: 720px) {
+        padding: 10px 0;       /* menos padding en móvil */
+    }
+    nav a {
+        margin-left: 12px;     /* reduce el espacio entre enlaces */
+        font-size: 0.95rem;    /* fuente más chica para que quepan */
+        padding: 6px 8px;      /* un poco de padding dentro del enlace */
+    }
+    nav a.logout-btn {
+        margin-left: 12px;     /* igual que los demás enlaces */
+        padding: 6px 14px;     /* tamaño más acorde a móvil */
+        font-size: 0.9rem;
+    }
+}
 }
 nav a.active, nav a:hover {
     color: var(--primary);
@@ -92,48 +102,38 @@ nav a.logout-btn {
     font-weight: 700;
     transition: background var(--transition);
 }
-nav a.logout-btn:hover {
-    background: #008ccf;
+nav a.logout-btn {
+    width: 100%;      /* hace que el botón agarre toda la línea */
+    text-align: center;
+    margin: 8px 0 0 0; /* separa del resto de enlaces */
+}
 }
 
 /* LANDING */
-.landing {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    gap: 32px;
-    padding: 56px 0 32px 0;
-    background: var(--accent);
-    min-height: 340px;
-}
-.landing-content {
-    max-width: 440px;
-}
-.landing-content h1 {
-    font-size: 2.1rem;
-    font-weight: 800;
-    margin-bottom: 0.7em;
-    color: var(--primary);
-    font-family: 'Montserrat', Arial, sans-serif;
-}
-.landing-content p {
-    font-size: 1.15rem;
-    margin-bottom: 1.5em;
-    color: #425265;
-    font-weight: 400;
-}
-.primary-btn {
-    background: var(--primary);
-    color: #fff;
-    border: none;
-    font-size: 1.1rem;
-    padding: 13px 40px;
-    border-radius: var(--radius);
-    font-weight: 600;
-    cursor: pointer;
-    box-shadow: 0 2px 8px 0 #a3c8ee38;
-    transition: background var(--transition);
+@media (max-width: 720px) {
+    /* ... regla de .landing ya existente ... */
+    .landing {
+        flex-direction: column;   /* apila vertical (texto encima de imagen) */
+        padding: 24px 0 16px 0;    /* menos padding en vertical */
+        gap: 16px;                /* reduce separación */
+    }
+    .landing-content h1 {
+        font-size: 1.75rem;       /* un poco más pequeño para móviles */
+    }
+    .landing-content p {
+        font-size: 1rem;
+        margin-bottom: 1em;
+    }
+    .primary-btn {
+        display: block;           /* ocupa toda la línea */
+        width: 90%;               /* ocupa 90% dentro del contenedor flex */
+        padding: 12px 0;          /* vertical más alto, horizontal cero */
+        font-size: 1rem;          /* fuente ligeramente más chica */
+        text-align: center;
+    }
+    .landing-img {
+        max-width: 90%;           /* reduce la imagen para que no ocupe más del ancho */
+    }
 }
 .primary-btn:hover {
     background: var(--primary-light);
@@ -502,5 +502,69 @@ footer {
   .acceso-container button {
     font-size: 0.95rem; /* reduce ligeramente la fuente de inputs/botón */
     padding: 10px 14px; /* menos padding en inputs/botón */
+  }
+}
+@media (max-width: 480px) {
+  /* ---------- Header / Nav ---------- */
+  .container.header-flex {
+    padding: 8px 0;
+  }
+  nav a {
+    margin-left: 8px;
+    font-size: 0.9rem;
+    padding: 4px 6px;
+  }
+  nav a.logout-btn {
+    padding: 6px 10px;
+    font-size: 0.85rem;
+  }
+
+  /* ---------- Landing ---------- */
+  .landing {
+    padding: 16px 0 12px 0;
+    gap: 12px;
+  }
+  .landing-content h1 {
+    font-size: 1.5rem;
+  }
+  .landing-content p {
+    font-size: 0.95rem;
+  }
+  .primary-btn {
+    width: 100%;
+    padding: 10px 0;
+    font-size: 0.9rem;
+  }
+  .landing-img {
+    max-width: 100%;
+  }
+
+  /* ---------- Sección 'Alumnos en búsqueda laboral' ---------- */
+  .alumnos-header {
+    flex-direction: column;
+    padding: 0 8px;
+  }
+  #busquedaAlumno {
+    min-width: 100%; /* ocupa todo en celular */
+  }
+
+  /* ---------- Grid de tarjetas ---------- */
+  .alumnos-grid {
+    gap: 12px;
+    padding: 0 8px;
+  }
+
+  /* ---------- Acceso (ya lo tenías, pero insisto) ---------- */
+  .acceso-container {
+    padding: 18px 8vw;
+    max-width: 99vw;
+  }
+  .acceso-titulo {
+    font-size: 1.2rem;
+  }
+  .acceso-form input,
+  .acceso-form button {
+    font-size: 0.9rem;
+    padding: 10px 12px;
   }
 }
