@@ -411,9 +411,10 @@ footer {
         padding: 6px 8px;
     }
     nav a.logout-btn {
-        margin-left: 12px;
-        padding: 6px 14px;
-        font-size: 0.9rem;
+        margin-left: 0;       /* eliminar el margen izquierdo */
+    width: 100%;          /* ocupa 100% dentro de su contenedor flex */
+    text-align: center;   /* centra el texto */
+    margin-top: 8px;
     }
 
     /* Landing */
@@ -478,8 +479,11 @@ footer {
         padding: 4px 6px;
     }
     nav a.logout-btn {
-        padding: 6px 10px;
-        font-size: 0.85rem;
+        width: 100%;
+    margin-left: 0;
+    margin-top: 6px;
+    padding: 8px 0;       /* ajusta el padding interno si quieres que se vea más “tocable” */
+    font-size: 0.85rem;
     }
 
     /* Landing */
