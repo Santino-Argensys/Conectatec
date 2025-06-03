@@ -33,6 +33,7 @@ header {
 }
 .acceso-container {
     max-width: 360px;
+    width: 90%; 
     margin: 70px auto 0 auto;
     background: #fff;
     padding: 38px 34px 26px 34px;
@@ -41,6 +42,7 @@ header {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
 }
 .hidden { display: none; }
 .container.header-flex {
@@ -488,4 +490,17 @@ footer {
 #perfilMsg {
     margin-top: 10px;
     text-align: center;
+}
+@media (max-width: 480px) {
+  .acceso-container {
+    padding: 20px 16px 20px 16px; /* menos padding en dispositivos muy chicos */
+  }
+  .acceso-titulo {
+    font-size: 1.25rem; /* agranda un poco el título para que sea más legible */
+  }
+  .acceso-container input,
+  .acceso-container button {
+    font-size: 0.95rem; /* reduce ligeramente la fuente de inputs/botón */
+    padding: 10px 14px; /* menos padding en inputs/botón */
+  }
 }
