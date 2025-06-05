@@ -10,6 +10,7 @@
     <div class="acceso-container">
         <img src="img/logoconectatec.png" alt="Logo Conectatec" class="logo-img acceso-logo">
         <h2 class="acceso-titulo">Ingresá a Conectatec</h2>
+
         <!-- Login Form -->
         <form id="loginForm" class="acceso-form">
             <input type="email" id="loginEmail" placeholder="Email" required>
@@ -21,6 +22,7 @@
             ¿No tenés cuenta?
             <a href="#" onclick="mostrarRegistro(); return false;">Registrate aquí</a>
         </p>
+
         <!-- Registro -->
         <div id="registerDiv" class="hidden acceso-form">
             <h3>Registro de Alumno</h3>
@@ -29,6 +31,19 @@
                 <input type="text" id="regApellido" placeholder="Apellido" required>
                 <input type="email" id="regEmail" placeholder="Email" required>
                 <input type="password" id="regPassword" placeholder="Contraseña" required>
+
+                <!-- Desplegable para seleccionar Colegio -->
+                <select id="regColegio" required>
+                    <option value="">Seleccioná tu colegio</option>
+                    <!-- JS agregará aquí las opciones -->
+                </select>
+
+                <!-- Desplegable para seleccionar Centro (opcional) -->
+                <select id="regCentro">
+                    <option value="">Seleccioná tu centro (opcional)</option>
+                    <!-- JS agregará aquí las opciones -->
+                </select>
+
                 <input type="text" id="regCarrera" placeholder="Carrera" required>
                 <input type="text" id="regDescripcion" placeholder="Descripción (opcional)">
                 <input type="text" id="regTelefono" placeholder="Teléfono">
@@ -39,7 +54,8 @@
                 <a href="#" onclick="ocultarRegistro(); return false;">Volver a iniciar sesión</a>
             </p>
         </div>
-    </div> 
+    </div>
+
     <script src="acceso.js"></script>
 </body>
 </html>
