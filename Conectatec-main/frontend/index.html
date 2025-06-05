@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Conectatec - Bolsa de Trabajo Técnica</title>
@@ -10,12 +9,14 @@
 </head>
 <body>
     <script>
-const session = JSON.parse(localStorage.getItem('usuarioConectatec'));
-const user = session && session.user;
-if (!user || !user.id) {
-    window.location.href = "acceso.html";
-}
-</script>
+        // Verificar sesión, si no hay redirigir al login
+        const session = JSON.parse(localStorage.getItem('usuarioConectatec'));
+        const user = session && session.user;
+        if (!user || !user.id) {
+            window.location.href = "acceso.html";
+        }
+    </script>
+
     <header>
         <div class="container header-flex">
             <div class="logo-area">
@@ -26,26 +27,22 @@ if (!user || !user.id) {
                 <a href="#" class="active">Inicio</a>
                 <a href="#">Empresas</a>
                 <a href="perfil.html">Mi perfil</a>
-                <a href="#" class="logout-btn">Cerrar sesión</a>
+                <a href="#" class="logout-btn" onclick="logout()">Cerrar sesión</a>
             </nav>
-            <script>
-if (!localStorage.getItem('usuarioConectatec')) {
-    window.location.href = "acceso.html";
-}
-</script>
         </div>
     </header>
+
     <main>
         <!-- LANDING -->
-         
         <section class="landing">
-  <div class="landing-content">
-      <h1>Impulsa tu futuro técnico</h1>
-      <p>Conectamos alumnos de escuelas técnicas con las mejores empresas para que su talento llegue más lejos.</p>
-      <button class="primary-btn" onclick="showLogin()">Ingresar / Registrarse</button>
-  </div>
-  <img src="img/banner_conectatec.svg" alt="Banner Conectatec" class="landing-banner">
-</section>
+            <div class="landing-content">
+                <h1>Impulsa tu futuro técnico</h1>
+                <p>Conectamos alumnos de escuelas técnicas con las mejores empresas para que su talento llegue más lejos.</p>
+                <button class="primary-btn" onclick="showLogin()">Ingresar / Registrarse</button>
+            </div>
+            <img src="img/banner_conectatec.svg" alt="Banner Conectatec" class="landing-banner">
+        </section>
+
         <!-- LOGIN MODAL -->
         <div id="loginModal" class="modal hidden">
             <div class="modal-content login-modal">
@@ -66,6 +63,16 @@ if (!localStorage.getItem('usuarioConectatec')) {
         <section id="alumnosSection">
             <div class="alumnos-header">
                 <h2>Alumnos en búsqueda laboral</h2>
+
+                <!-- Nuevos filtros: Colegio y Centro -->
+                <select id="filtroColegio">
+                    <option value="">Todos los colegios</option>
+                </select>
+                <select id="filtroCentro">
+                    <option value="">Todos los centros</option>
+                </select>
+
+                <!-- Búsqueda por nombre/carrera -->
                 <input type="text" id="busquedaAlumno" placeholder="Buscar por nombre o carrera...">
             </div>
             <div id="alumnosGrid" class="alumnos-grid"></div>
@@ -79,11 +86,13 @@ if (!localStorage.getItem('usuarioConectatec')) {
             </div>
         </div>
     </main>
+
     <footer>
         <div class="container">
             <span>&copy; 2024 Conectatec. Todos los derechos reservados.</span>
         </div>
     </footer>
+
     <script src="script.js"></script>
 </body>
 </html>
