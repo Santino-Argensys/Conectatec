@@ -10,7 +10,8 @@ let centrosGlobal = [];  // Lista de centros para poblar el select
 // ===========================================================
 async function cargarColegiosFiltro() {
     try {
-        const res = await fetch('https://conectatec-1.onrender.com/api/colegios');
+        // Se usa ruta relativa en lugar de la URL absoluta
+        const res = await fetch('/api/colegios');
         if (!res.ok) throw new Error('Error al obtener colegios');
         colegiosGlobal = await res.json();
         const select = document.getElementById('filtroColegio');
@@ -23,13 +24,14 @@ async function cargarColegiosFiltro() {
         });
     } catch (err) {
         console.error('Error cargando colegios:', err);
-        // Podrías mostrar un mensaje en pantalla, si lo deseas
+        // Podrías mostrar un mensaje en pantalla si lo deseas
     }
 }
 
 async function cargarCentrosFiltro() {
     try {
-        const res = await fetch('https://conectatec-1.onrender.com/api/centros');
+        // Se usa ruta relativa en lugar de la URL absoluta
+        const res = await fetch('/api/centros');
         if (!res.ok) throw new Error('Error al obtener centros');
         centrosGlobal = await res.json();
         const select = document.getElementById('filtroCentro');
@@ -42,7 +44,7 @@ async function cargarCentrosFiltro() {
         });
     } catch (err) {
         console.error('Error cargando centros:', err);
-        // Podrías mostrar un mensaje en pantalla, si lo deseas
+        // Podrías mostrar un mensaje en pantalla si lo deseas
     }
 }
 
@@ -51,7 +53,8 @@ async function cargarCentrosFiltro() {
 // ===========================================================
 async function fetchAlumnos() {
     try {
-        const response = await fetch('https://conectatec-1.onrender.com/api/alumnos');
+        // Se usa ruta relativa en lugar de la URL absoluta
+        const response = await fetch('/api/alumnos');
         if (!response.ok) throw new Error('Error al obtener alumnos');
         const alumnos = await response.json();
 
@@ -75,7 +78,6 @@ async function fetchAlumnos() {
 // ===========================================================
 // 4) FUNCIONES DE FILTRADO Y RENDERIZADO
 // ===========================================================
-
 function filterAlumnos() {
     const filtroColegio = document.getElementById('filtroColegio').value;
     const filtroCentro = document.getElementById('filtroCentro').value;
@@ -160,7 +162,8 @@ document.addEventListener('DOMContentLoaded', () => {
         mensaje.textContent = "";
 
         try {
-            const response = await fetch('https://conectatec-1.onrender.com/api/alumnos/login', {
+            // Se usa ruta relativa en lugar de la URL absoluta
+            const response = await fetch('/api/alumnos/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password: pass })
