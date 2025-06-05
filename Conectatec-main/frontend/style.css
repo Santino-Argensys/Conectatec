@@ -663,3 +663,59 @@ footer {
     padding: 10px 14px;
   }
 }
+/* ==============================
+   ESTILOS PARA FILTROS (index.html)
+   ============================== */
+
+/* Contenedor de filtros (al lado del buscador) */
+.alumnos-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px; /* separación entre elementos */
+}
+
+/* Estilo general para los selects de filtro */
+.alumnos-header select {
+  padding: 8px 12px;
+  font-size: 1rem;
+  border: 1px solid #d1e2ee;
+  border-radius: 0.7em;
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+/* Al hacer foco, cambiar el borde */
+.alumnos-header select:focus {
+  border-color: var(--primary);
+  outline: none;
+}
+
+/* Ajustar ancho máximo de los selects para que no estiren demasiado */
+#filtroColegio,
+#filtroCentro {
+  min-width: 180px;
+  max-width: 240px;
+  width: 100%;
+}
+
+/* En pantallas chicas, hacer que los filtros ocupen todo el ancho disponible */
+@media (max-width: 720px) {
+  .alumnos-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  #filtroColegio,
+  #filtroCentro,
+  #busquedaAlumno {
+    width: 100%;
+  }
+}
+
+/* Opcional: espaciar un poco la sección de filtros de la grilla */
+#alumnosSection {
+  padding-top: 24px;
+}
