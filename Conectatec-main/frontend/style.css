@@ -19,35 +19,16 @@ html, body {
     min-height: 100%;
 }
 
+/* ============================
+   HEADER / NAVEGACIÓN
+   ============================ */
 header {
     background: var(--header);
     position: sticky;
     top: 0;
     z-index: 50;
-    background-color: #fff;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
-
-.acceso-bg {
-    background: linear-gradient(115deg, #f6f4fa 40%, #46236b22 100%);
-    min-height: 100vh;
-    margin: 0;
-}
-
-.acceso-container {
-    max-width: 360px;
-    width: 90%; 
-    margin: 70px auto 0 auto;
-    background: #fff;
-    padding: 38px 34px 26px 34px;
-    border-radius: 1.3rem;
-    box-shadow: 0 6px 44px #46236b18;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.hidden { display: none; }
 
 .container.header-flex {
     display: flex;
@@ -91,7 +72,8 @@ nav a {
     position: relative;
 }
 
-nav a.active, nav a:hover {
+nav a.active,
+nav a:hover {
     color: var(--primary);
 }
 
@@ -109,7 +91,9 @@ nav a.logout-btn:hover {
     background: #008ccf;
 }
 
-/* LANDING */
+/* ============================
+   LANDING (index.html)
+   ============================ */
 .landing {
     display: flex;
     flex-wrap: wrap;
@@ -180,7 +164,9 @@ nav a.logout-btn:hover {
     align-items: center;
 }
 
-/* MODAL */
+/* ============================
+   MODAL GENERAL (login / perfil)
+   ============================ */
 .modal {
     display: flex;
     align-items: center;
@@ -228,6 +214,12 @@ nav a.logout-btn:hover {
     border-radius: .6em;
     font-size: 1rem;
     background: #f8fcff;
+    box-sizing: border-box;
+}
+
+.modal-content input:focus {
+    border-color: var(--primary);
+    outline: none;
 }
 
 .close {
@@ -239,7 +231,156 @@ nav a.logout-btn:hover {
     cursor: pointer;
 }
 
-/* LISTADO DE ALUMNOS */
+/* ============================
+   SECCIÓN “ACCESO” (acceso.html)
+   ============================ */
+/* Fondo del body en la página de acceso */
+.acceso-bg {
+    background: linear-gradient(115deg, #f6f4fa 40%, #46236b22 100%);
+    min-height: 100vh;
+    margin: 0;
+}
+
+/* Contenedor blanco con bordes redondeados */
+.acceso-container {
+    max-width: 360px;
+    width: 90%;
+    margin: 70px auto 0 auto;
+    background: #fff;
+    padding: 38px 34px 26px 34px;
+    border-radius: 1.3rem;
+    box-shadow: 0 6px 44px #46236b18;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Ocultar elementos con esta clase */
+.hidden {
+    display: none;
+}
+
+/* Logo dentro del contenedor de acceso */
+.acceso-logo {
+    height: 56px;
+    width: auto;
+    margin-bottom: 16px;
+    border-radius: 18px;
+    box-shadow: 0 2px 18px #46236b1c;
+    background: #46236b;
+    padding: 10px;
+}
+
+/* Título de acceso */
+.acceso-titulo {
+    margin-bottom: 20px;
+    font-family: 'Montserrat', Arial, sans-serif;
+    font-weight: 800;
+    font-size: 1.45em;
+    color: #231442;
+    text-align: center;
+}
+
+/* “Tabs” para alternar Alumno / Profesor */
+.tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.tab-btn {
+    background: #e0e0e0;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 0.7em;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.2s, color 0.2s;
+}
+
+.tab-btn.active,
+.tab-btn:hover {
+    background: var(--primary);
+    color: #fff;
+}
+
+/* Formularios (login/registro) dentro de acceso */
+.acceso-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;         /* Espacio vertical entre cada campo y el botón */
+    width: 100%;       /* Que ocupe todo el ancho del contenedor (.acceso-container) */
+    margin-bottom: 4px;
+}
+
+/* Inputs y selects del formulario de acceso */
+.acceso-form input,
+.acceso-form select {
+    display: block;
+    width: 100%;
+    padding: 12px 14px;
+    border: 1.5px solid #e0def4;
+    border-radius: 1em;
+    font-size: 1.07em;
+    background: #f6f4fa;
+    transition: border-color .2s;
+    box-sizing: border-box;
+}
+
+.acceso-form input:focus,
+.acceso-form select:focus {
+    border-color: var(--primary);
+    outline: none;
+}
+
+/* Botones de acceso (“Iniciar sesión” o “Registrarme”) */
+.acceso-btn {
+    display: block;
+    width: 100%;
+    margin-top: 8px;
+    font-size: 1.1em;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    padding: 14px 0;       /* Padding vertical para que se vea “grueso” */
+    border-radius: 1.2em;
+    cursor: pointer;
+    text-align: center;
+    transition: background .17s;
+    box-sizing: border-box;
+}
+
+.acceso-btn:hover {
+    background: var(--primary-light);
+}
+
+/* Enlaces de “No tenés cuenta / Volver a iniciar sesión” */
+.acceso-link {
+    margin: 18px 0 0 0;
+    text-align: center;
+    font-size: 1em;
+}
+
+.acceso-link a {
+    color: var(--primary);
+    text-decoration: underline;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+/* Mensajes de error / éxito debajo de los formularios */
+.acceso-msg {
+    margin-top: 6px;
+    min-height: 20px;
+    font-size: 0.99em;
+    text-align: center;
+}
+
+/* ============================
+   LISTADO DE ALUMNOS (index.html)
+   ============================ */
 .alumnos-header {
     max-width: 1080px;
     margin: 32px auto 12px auto;
@@ -259,6 +400,7 @@ nav a.logout-btn:hover {
     font-weight: 700;
 }
 
+/* Campo de búsqueda */
 #busquedaAlumno {
     padding: 9px 14px;
     border-radius: .7em;
@@ -267,8 +409,29 @@ nav a.logout-btn:hover {
     background: #fff;
     font-size: 1rem;
     box-shadow: 0 2px 4px #88c2eb0f;
+    box-sizing: border-box;
 }
 
+/* Filtros de Colegio y Centro: estilo uniforme con los inputs */
+.alumnos-header select {
+    padding: 9px 14px;
+    border-radius: .7em;
+    border: 1px solid #d1e2ee;
+    background: #fff;
+    font-size: 1rem;
+    box-shadow: 0 2px 4px #88c2eb0f;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+#filtroColegio,
+#filtroCentro {
+    min-width: 180px;
+    max-width: 240px;
+    width: 100%;
+}
+
+/* Grilla de tarjetas (“cards”) de alumnos */
 .alumnos-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
@@ -344,7 +507,9 @@ nav a.logout-btn:hover {
     background: #0086c1;
 }
 
-/* MODAL PERFIL */
+/* ============================
+   MODAL PERFIL (index.html)
+   ============================ */
 .perfil-modal {
     max-width: 400px;
     width: 98%;
@@ -380,7 +545,8 @@ nav a.logout-btn:hover {
     margin-bottom: 1.1em;
 }
 
-.perfil-modal .perfil-telefono, .perfil-modal .perfil-email {
+.perfil-modal .perfil-telefono,
+.perfil-modal .perfil-email {
     color: #16507a;
     font-size: 1.01em;
     margin-bottom: 0.3em;
@@ -388,7 +554,9 @@ nav a.logout-btn:hover {
     font-weight: 600;
 }
 
-/* FOOTER */
+/* ============================
+   FOOTER
+   ============================ */
 footer {
     background: #eaf4fb;
     padding: 14px 0;
@@ -397,8 +565,52 @@ footer {
     font-size: 0.99rem;
 }
 
-/* RESPONSIVE */
-/* Media queries para pantallas <= 720px */
+/* ============================
+   ESTILOS PARA FILTROS (index.html)
+   ============================ */
+/* Contenedor de filtros (al lado del buscador) */
+.alumnos-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px; /* separación entre elementos */
+}
+
+/* Estilo general para los selects de filtro */
+.alumnos-header select {
+    padding: 8px 12px;
+    font-size: 1rem;
+    border: 1px solid #d1e2ee;
+    border-radius: 0.7em;
+    background: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+/* Al hacer foco, cambiar el borde */
+.alumnos-header select:focus {
+    border-color: var(--primary);
+    outline: none;
+}
+
+/* Ajustar ancho máximo de los selects para que no estiren demasiado */
+#filtroColegio,
+#filtroCentro {
+    min-width: 180px;
+    max-width: 240px;
+    width: 100%;
+}
+
+/* Opcional: espaciar un poco la sección de filtros de la grilla */
+#alumnosSection {
+    padding-top: 24px;
+}
+
+/* ============================
+   RESPONSIVE (general)
+   ============================ */
+/* Para pantallas <= 720px */
 @media (max-width: 720px) {
     /* Header / Nav */
     .container.header-flex {
@@ -411,10 +623,10 @@ footer {
         padding: 6px 8px;
     }
     nav a.logout-btn {
-        margin-left: 0;       /* eliminar el margen izquierdo */
-    width: 100%;          /* ocupa 100% dentro de su contenedor flex */
-    text-align: center;   /* centra el texto */
-    margin-top: 8px;
+        margin-left: 0;       
+        width: 100%;          
+        text-align: center;   
+        margin-top: 8px;
     }
 
     /* Landing */
@@ -451,6 +663,10 @@ footer {
     #busquedaAlumno {
         min-width: 100%;
     }
+    #filtroColegio,
+    #filtroCentro {
+        width: 100%;
+    }
     .alumnos-grid {
         padding: 0 2px;
     }
@@ -467,7 +683,7 @@ footer {
     }
 }
 
-/* Media queries para pantallas <= 480px */
+/* Para pantallas <= 480px */
 @media (max-width: 480px) {
     /* Header / Nav */
     .container.header-flex {
@@ -480,10 +696,10 @@ footer {
     }
     nav a.logout-btn {
         width: 100%;
-    margin-left: 0;
-    margin-top: 6px;
-    padding: 8px 0;       /* ajusta el padding interno si quieres que se vea más “tocable” */
-    font-size: 0.85rem;
+        margin-left: 0;
+        margin-top: 6px;
+        padding: 8px 0;          
+        font-size: 0.85rem;
     }
 
     /* Landing */
@@ -519,200 +735,34 @@ footer {
         padding: 0 8px;
     }
 
-  /* ==============================
-   SECCIÓN “Acceso” (acceso.html)
-   ============================== */
+    /* SECCIÓN “Acceso” (acceso.html) */
+    .acceso-container {
+        padding: 20px 16px 20px 16px;
+    }
+    .acceso-titulo {
+        font-size: 1.25rem;
+    }
+    .acceso-form input,
+    .acceso-form select,
+    .acceso-form button {
+        font-size: 0.95rem;
+        padding: 10px 14px;
+    }
+    .acceso-logo {
+        height: 48px;
+        margin-bottom: 12px;
+    }
 
-/* 1) Fondo y contenedor principal */
-.acceso-bg {
-  background: linear-gradient(115deg, #f6f4fa 40%, #46236b22 100%);
-  min-height: 100vh;
-  margin: 0;
-}
-
-.acceso-container {
-  max-width: 360px;
-  width: 90%;
-  margin: 70px auto 0 auto;
-  background: #fff;
-  padding: 38px 34px 26px 34px;
-  border-radius: 1.3rem;
-  box-shadow: 0 6px 44px #46236b18;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-/* 2) Logo encima del formulario */
-.acceso-logo {
-  height: 56px;
-  width: auto;
-  margin-bottom: 16px;
-  border-radius: 18px;
-  box-shadow: 0 2px 18px #46236b1c;
-  background: #46236b;
-  padding: 10px;
-}
-
-/* 3) Título “Ingresá a Conectatec” */
-.acceso-titulo {
-  margin-bottom: 20px;
-  font-family: 'Montserrat', Arial, sans-serif;
-  font-weight: 800;
-  font-size: 1.45em;
-  color: #231442;
-  text-align: center;
-}
-
-/* 4) Formulario: forzar apilamiento vertical */
-.acceso-form {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;         /* Espacio vertical entre cada campo y el botón */
-  width: 100%;       /* Que ocupe todo el ancho del contenedor (.acceso-container) */
-  margin-bottom: 4px;
-}
-
-/* 5) Inputs del formulario: mostrar como bloque y ocupar 100% */
-.acceso-form input {
-  display: block;
-  width: 100%;
-  padding: 12px 14px;
-  border: 1.5px solid #e0def4;
-  border-radius: 1em;
-  font-size: 1.07em;
-  background: #f6f4fa;
-  transition: border-color .2s;
-  box-sizing: border-box;
-  /* Nota: eliminamos el “margin-bottom: 1px” para no romper el gap de 14px */
-}
-
-/* 6) Focus sobre inputs */
-.acceso-form input:focus {
-  border-color: var(--primary);
-  outline: none;
-}
-
-/* 7) Botón “Iniciar sesión” o “Registrarme”: también bloque y ancho completo */
-.acceso-btn {
-  display: block;
-  width: 100%;
-  margin-top: 8px;
-  font-size: 1.1em;
-  font-weight: 700;
-  letter-spacing: 0.01em;
-  background: var(--primary);
-  color: #fff;
-  border: none;
-  padding: 14px 0;       /* Padding vertical para que se vea “grueso” y cómodo de tocar */
-  border-radius: 1.2em;
-  cursor: pointer;
-  text-align: center;
-  transition: background .17s;
-  box-sizing: border-box;
-}
-
-/* 8) Hover del botón */
-.acceso-btn:hover {
-  background: var(--primary-light);
-}
-
-/* 9) Enlace “¿No tenés cuenta? Regístrate aquí” */
-.acceso-link {
-  margin: 18px 0 0 0;
-  text-align: center;
-  font-size: 1em;
-}
-
-.acceso-link a {
-  color: var(--primary);
-  text-decoration: underline;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-/* 10) Mensaje de error/success debajo del formulario */
-.acceso-msg {
-  margin-top: 6px;
-  min-height: 20px;
-  font-size: 0.99em;
-  text-align: center;
-}
-
-/* ================
-   Ajustes Responsive
-   ================ */
-@media (max-width: 530px) {
-  .acceso-container {
-    padding: 18px 8vw;
-    min-width: 0;
-    max-width: 99vw;
-  }
-}
-
-@media (max-width: 480px) {
-  .acceso-container {
-    padding: 20px 16px 20px 16px;
-  }
-  .acceso-titulo {
-    font-size: 1.25rem;
-  }
-  .acceso-form input,
-  .acceso-form button {
-    font-size: 0.95rem;
-    padding: 10px 14px;
-  }
-}
-/* ==============================
-   ESTILOS PARA FILTROS (index.html)
-   ============================== */
-
-/* Contenedor de filtros (al lado del buscador) */
-.alumnos-header {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 12px; /* separación entre elementos */
-}
-
-/* Estilo general para los selects de filtro */
-.alumnos-header select {
-  padding: 8px 12px;
-  font-size: 1rem;
-  border: 1px solid #d1e2ee;
-  border-radius: 0.7em;
-  background: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  cursor: pointer;
-  transition: border-color 0.2s;
-}
-
-/* Al hacer foco, cambiar el borde */
-.alumnos-header select:focus {
-  border-color: var(--primary);
-  outline: none;
-}
-
-/* Ajustar ancho máximo de los selects para que no estiren demasiado */
-#filtroColegio,
-#filtroCentro {
-  min-width: 180px;
-  max-width: 240px;
-  width: 100%;
-}
-
-/* En pantallas chicas, hacer que los filtros ocupen todo el ancho disponible */
-@media (max-width: 720px) {
-  .alumnos-header {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 8px;
-  }
-  #filtroColegio,
-  #filtroCentro,
-  #busquedaAlumno {
-    width: 100%;
-  }
+    /* Tabs de “Alumno / Profesor” */
+    .tabs {
+        flex-wrap: wrap;
+        gap: 4px;
+    }
+    .tab-btn {
+        flex: 1;
+        padding: 8px 0;
+        font-size: 0.9rem;
+    }
 }
 
 /* Opcional: espaciar un poco la sección de filtros de la grilla */
