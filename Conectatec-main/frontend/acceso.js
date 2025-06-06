@@ -1,164 +1,341 @@
-// ======================================================
-// 1) AL CARGAR LA PÁGINA: poblar los <select> de colegios y centros
-// ======================================================
-async function cargarColegios() {
+// ===========================================================
+// 1) VARIABLES GLOBALES
+// ===========================================================
+let alumnosGlobal = [];  
+let colegiosGlobal = []; 
+let centrosGlobal = [];  
+
+// ===========================================================
+// 2) CARGAR COLEGIOS Y CENTROS PARA LOS FILTROS (ALUMNOS)
+// ===========================================================
+async function cargarColegiosFiltro() {
     try {
-        const res = await fetch('https://conectatec-1.onrender.com/api/colegios');
+        const res = await fetch('/api/colegios');
         if (!res.ok) throw new Error('Error al obtener colegios');
-        const colegios = await res.json();
-        const selectColegio = document.getElementById('regColegio');
-        colegios.forEach(colegio => {
-            const option = document.createElement('option');
-            option.value = colegio.id;
-            option.textContent = colegio.nombre;
-            selectColegio.appendChild(option);
+        colegiosGlobal = await res.json();
+        // Poblamos el select de registro de alumnos
+        const select = document.getElementById('regAlumnoColegio');
+        colegiosGlobal.forEach(colegio => {
+            const opt = document.createElement('option');
+            opt.value = colegio.id;
+            opt.textContent = colegio.nombre;
+            select.appendChild(opt);
         });
     } catch (err) {
         console.error('Error cargando colegios:', err);
-        // En caso de error, podrías mostrar un mensaje en pantalla si lo deseas
     }
 }
 
-async function cargarCentros() {
+async function cargarCentrosFiltro() {
     try {
-        const res = await fetch('https://conectatec-1.onrender.com/api/centros');
+        const res = await fetch('/api/centros');
         if (!res.ok) throw new Error('Error al obtener centros');
-        const centros = await res.json();
-        const selectCentro = document.getElementById('regCentro');
-        centros.forEach(centro => {
-            const option = document.createElement('option');
-            option.value = centro.id;
-            option.textContent = centro.nombre;
-            selectCentro.appendChild(option);
+        centrosGlobal = await res.json();
+        // Poblamos el select de registro de alumnos
+        const select = document.getElementById('regAlumnoCentro');
+        centrosGlobal.forEach(centro => {
+            const opt = document.createElement('option');
+            opt.value = centro.id;
+            opt.textContent = centro.nombre;
+            select.appendChild(opt);
         });
     } catch (err) {
         console.error('Error cargando centros:', err);
-        // En caso de error, podrías mostrar un mensaje en pantalla si lo deseas
     }
 }
 
-window.addEventListener('DOMContentLoaded', () => {
-    cargarColegios();
-    cargarCentros();
+// ===========================================================
+// 3) SWITCH DE PESTAÑAS (Alumno vs Profesor)
+// ===========================================================
+document.addEventListener('DOMContentLoaded', () => {
+    // Mostrar/ocultar: al cargar, dejamos activa la pestaña “Alumno”
+    mostrarSolo('Alumno');
+
+    // Cuando el usuario hace clic en la tab “Alumno”
+    document.getElementById('tabAlumno').addEventListener('click', () => {
+        mostrarSolo('Alumno');
+    });
+
+    // Cuando hace clic en la tab “Profesor/Empresa”
+    document.getElementById('tabProfesor').addEventListener('click', () => {
+        mostrarSolo('Profesor');
+    });
+
+    // Cargamos los select de colegios y centros para el registro de alumnos
+    cargarColegiosFiltro();
+    cargarCentrosFiltro();
+
+    // Asociamos los forms a sus funciones
+    inicializarEventosAlumno();
+    inicializarEventosProfesor();
 });
 
-// ======================================================
-// 2) Lógica de LOGIN
-// ======================================================
-document.getElementById('loginForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    const email = document.getElementById('loginEmail').value.trim();
-    const pass = document.getElementById('loginPassword').value;
-    const mensaje = document.getElementById('loginMessage');
-    mensaje.textContent = "";
+// Función para mostrar solo los bloques que correspondan
+function mostrarSolo(tipo) {
+    const elements = {
+        Alumno: ['loginAlumnoDiv', 'registerAlumnoDiv'],
+        Profesor: ['loginProfesorDiv', 'registerProfesorDiv']
+    };
 
-    console.log("Intentando login con:", { email, pass });
+    // 1) Ocultamos TODO
+    document.getElementById('loginAlumnoDiv').classList.add('hidden');
+    document.getElementById('registerAlumnoDiv').classList.add('hidden');
+    document.getElementById('loginProfesorDiv').classList.add('hidden');
+    document.getElementById('registerProfesorDiv').classList.add('hidden');
 
-    try {
-        const response = await fetch('https://conectatec-1.onrender.com/api/alumnos/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password: pass })
-        });
-        console.log("Respuesta recibida del backend:", response);
+    // 2) Desactivamos clases “active” de tabs
+    document.getElementById('tabAlumno').classList.remove('active');
+    document.getElementById('tabProfesor').classList.remove('active');
 
-        const data = await response.json();
-        console.log("Body JSON recibido:", data);
+    if (tipo === 'Alumno') {
+        document.getElementById('loginAlumnoDiv').classList.remove('hidden');
+        document.getElementById('tabAlumno').classList.add('active');
+    } else {
+        document.getElementById('loginProfesorDiv').classList.remove('hidden');
+        document.getElementById('tabProfesor').classList.add('active');
+    }
+}
 
-        if (response.ok) {
-            // Guardar sesión en localStorage (o cookie) si querés
-            localStorage.setItem('usuarioConectatec', JSON.stringify(data));
-            // Redirigir a la landing o a donde corresponda
-            window.location.href = "index.html";
-        } else {
-            mensaje.textContent = data.error || "Credenciales incorrectas";
+// ===========================================================
+// 4) EVENTOS Y LÓGICA PARA ALUMNOS
+// ===========================================================
+function inicializarEventosAlumno() {
+    // 4.1) Mostrar registro alumno
+    window.mostrarRegistroAlumno = function() {
+        document.getElementById('loginAlumnoDiv').classList.add('hidden');
+        document.getElementById('registerAlumnoDiv').classList.remove('hidden');
+        document.getElementById('loginAlumnoMessage').textContent = '';
+    };
+
+    // 4.2) Ocultar registro alumno (volver a pantalla de login)
+    window.ocultarRegistroAlumno = function() {
+        document.getElementById('registerAlumnoDiv').classList.add('hidden');
+        document.getElementById('loginAlumnoDiv').classList.remove('hidden');
+        document.getElementById('registerAlumnoMessage').textContent = '';
+    };
+
+    // 4.3) Registro de alumno
+    document.getElementById('registerAlumnoForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const nombre       = document.getElementById('regAlumnoNombre').value.trim();
+        const apellido     = document.getElementById('regAlumnoApellido').value.trim();
+        const email        = document.getElementById('regAlumnoEmail').value.trim();
+        const password     = document.getElementById('regAlumnoPassword').value;
+        const selectColegio = document.getElementById('regAlumnoColegio');
+        const colegio_id   = selectColegio.value ? Number(selectColegio.value) : null;
+        const selectCentro = document.getElementById('regAlumnoCentro');
+        const centro_id    = selectCentro.value ? Number(selectCentro.value) : null;
+        const carrera      = document.getElementById('regAlumnoCarrera').value.trim();
+        const descripcion  = document.getElementById('regAlumnoDescripcion').value.trim();
+        const telefono     = document.getElementById('regAlumnoTelefono').value.trim();
+        const mensaje      = document.getElementById('registerAlumnoMessage');
+        mensaje.textContent = "";
+
+        if (!nombre || !apellido || !email || !password || !carrera || !colegio_id) {
+            mensaje.textContent = "Completá todos los campos obligatorios (incluyendo colegio).";
             mensaje.style.color = "#d00";
+            return;
         }
-    } catch (err) {
-        console.error("Error en fetch login:", err);
-        mensaje.textContent = "Error de conexión al servidor.";
-        mensaje.style.color = "#d00";
-    }
-});
 
-// ======================================================
-// 3) Mostrar / Ocultar sección de Registro
-// ======================================================
-function mostrarRegistro() {
-    document.getElementById('registerDiv').classList.remove('hidden');
-    document.getElementById('loginForm').classList.add('hidden');
-    document.getElementById('loginMessage').textContent = '';
-}
-
-function ocultarRegistro() {
-    document.getElementById('registerDiv').classList.add('hidden');
-    document.getElementById('loginForm').classList.remove('hidden');
-    document.getElementById('registerMessage').textContent = '';
-}
-
-// ======================================================
-// 4) Lógica de REGISTRO DE ALUMNO (con colegio_id y centro_id)
-// ======================================================
-document.getElementById('registerForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
-
-    const nombre       = document.getElementById('regNombre').value.trim();
-    const apellido     = document.getElementById('regApellido').value.trim();
-    const email        = document.getElementById('regEmail').value.trim();
-    const password     = document.getElementById('regPassword').value;
-    const selectColegio = document.getElementById('regColegio');
-    const colegio_id   = selectColegio.value ? Number(selectColegio.value) : null;
-    const selectCentro = document.getElementById('regCentro');
-    const centro_id    = selectCentro.value ? Number(selectCentro.value) : null;
-    const carrera      = document.getElementById('regCarrera').value.trim();
-    const descripcion  = document.getElementById('regDescripcion').value.trim();
-    const telefono     = document.getElementById('regTelefono').value.trim();
-    const mensaje      = document.getElementById('registerMessage');
-    mensaje.textContent = "";
-
-    console.log("Intentando registrar:", { nombre, apellido, email, password, carrera, descripcion, telefono, colegio_id, centro_id });
-
-    // Validaciones
-    if (!nombre || !apellido || !email || !password || !carrera || !colegio_id) {
-        mensaje.textContent = "Completá todos los campos obligatorios (incluyendo colegio).";
-        mensaje.style.color = "#d00";
-        return;
-    }
-
-    try {
-        const response = await fetch('https://conectatec-1.onrender.com/api/alumnos/registro', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                nombre,
-                apellido,
-                email,
-                password,
-                carrera,
-                descripcion,
-                telefono,
-                colegio_id,
-                centro_id
-            })
-        });
-        console.log("Respuesta recibida del backend en registro:", response);
-
-        const data = await response.json();
-        console.log("Body JSON recibido en registro:", data);
-
-        if (response.ok) {
-            mensaje.textContent = "¡Registro exitoso! Ya podés iniciar sesión.";
-            mensaje.style.color = "#0094d3";
-            setTimeout(() => {
-                ocultarRegistro();
-            }, 1200);
-        } else {
-            mensaje.textContent = data.error || "Error en el registro.";
+        try {
+            const response = await fetch('/api/alumnos/registro', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    nombre,
+                    apellido,
+                    email,
+                    password,
+                    carrera,
+                    descripcion,
+                    telefono,
+                    colegio_id,
+                    centro_id
+                })
+            });
+            const data = await response.json();
+            if (response.ok) {
+                mensaje.textContent = "¡Registro exitoso! Ya podés iniciar sesión.";
+                mensaje.style.color = "#0094d3";
+                setTimeout(ocultarRegistroAlumno, 1200);
+            } else {
+                mensaje.textContent = data.error || "Error en el registro.";
+                mensaje.style.color = "#d00";
+            }
+        } catch (err) {
+            mensaje.textContent = "Error de conexión al servidor.";
             mensaje.style.color = "#d00";
+            console.error('Error en registro alumno:', err);
         }
-    } catch (err) {
-        console.error("Error en fetch registro:", err);
-        mensaje.textContent = "Error de conexión al servidor.";
-        mensaje.style.color = "#d00";
-    }
-});
+    });
+
+    // 4.4) Login de alumno (modal)
+    document.getElementById('loginAlumnoForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const email = document.getElementById('loginAlumnoEmail').value.trim();
+        const pass = document.getElementById('loginAlumnoPassword').value;
+        const mensaje = document.getElementById('loginAlumnoMessage');
+        mensaje.textContent = "";
+
+        try {
+            const response = await fetch('/api/alumnos/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password: pass })
+            });
+            const data = await response.json();
+
+            if (response.ok) {
+                localStorage.setItem('usuarioConectatec', JSON.stringify(data));
+                mensaje.textContent = "¡Bienvenido/a!";
+                mensaje.style.color = "#0094d3";
+                setTimeout(() => {
+                    window.location.href = "index.html";
+                }, 800);
+            } else {
+                mensaje.textContent = data.error || "Credenciales incorrectas";
+                mensaje.style.color = "#d00";
+            }
+        } catch (err) {
+            mensaje.textContent = "Error de conexión al servidor.";
+            mensaje.style.color = "#d00";
+            console.error('Error en login alumno:', err);
+        }
+    });
+}
+
+// ===========================================================
+// 5) EVENTOS Y LÓGICA PARA PROFESORES/EMPRESAS
+// ===========================================================
+function inicializarEventosProfesor() {
+    // 5.1) Mostrar registro profesor
+    window.mostrarRegistroProfesor = function() {
+        document.getElementById('loginProfesorDiv').classList.add('hidden');
+        document.getElementById('registerProfesorDiv').classList.remove('hidden');
+        document.getElementById('loginProfesorMessage').textContent = '';
+    };
+
+    // 5.2) Ocultar registro profesor (volver a login profesor)
+    window.ocultarRegistroProfesor = function() {
+        document.getElementById('registerProfesorDiv').classList.add('hidden');
+        document.getElementById('loginProfesorDiv').classList.remove('hidden');
+        document.getElementById('registerProfesorMessage').textContent = '';
+    };
+
+    // 5.3) Registro de profesor/empresa
+    document.getElementById('registerProfesorForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const nombre_completo = document.getElementById('regProfesorNombre').value.trim();
+        const email          = document.getElementById('regProfesorEmail').value.trim();
+        const password       = document.getElementById('regProfesorPassword').value;
+        const institucion    = document.getElementById('regProfesorInstitucion').value.trim();
+        const cargo          = document.getElementById('regProfesorCargo').value.trim();
+        const telefono       = document.getElementById('regProfesorTelefono').value.trim();
+        const mensaje        = document.getElementById('registerProfesorMessage');
+        mensaje.textContent = "";
+
+        if (!nombre_completo || !email || !password || !institucion) {
+            mensaje.textContent = "Completá todos los campos obligatorios.";
+            mensaje.style.color = "#d00";
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/profesores/registro', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    nombre_completo,
+                    email,
+                    password,
+                    institucion,
+                    cargo,
+                    telefono
+                })
+            });
+            const data = await response.json();
+            if (response.ok) {
+                mensaje.textContent = "¡Registro exitoso! Ya podés iniciar sesión.";
+                mensaje.style.color = "#0094d3";
+                setTimeout(ocultarRegistroProfesor, 1200);
+            } else {
+                mensaje.textContent = data.error || "Error en el registro.";
+                mensaje.style.color = "#d00";
+            }
+        } catch (err) {
+            mensaje.textContent = "Error de conexión al servidor.";
+            mensaje.style.color = "#d00";
+            console.error('Error en registro profesor:', err);
+        }
+    });
+
+    // 5.4) Login de profesor/empresa
+    document.getElementById('loginProfesorForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const email = document.getElementById('loginProfesorEmail').value.trim();
+        const pass = document.getElementById('loginProfesorPassword').value;
+        const mensaje = document.getElementById('loginProfesorMessage');
+        mensaje.textContent = "";
+
+        try {
+            const response = await fetch('/api/profesores/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password: pass })
+            });
+            const data = await response.json();
+
+            if (response.ok) {
+                localStorage.setItem('usuarioConectatec', JSON.stringify(data));
+                mensaje.textContent = "¡Bienvenido/a!";
+                mensaje.style.color = "#0094d3";
+                setTimeout(() => {
+                    window.location.href = "index.html";
+                }, 800);
+            } else {
+                mensaje.textContent = data.error || "Credenciales incorrectas";
+                mensaje.style.color = "#d00";
+            }
+        } catch (err) {
+            mensaje.textContent = "Error de conexión al servidor.";
+            mensaje.style.color = "#d00";
+            console.error('Error en login profesor:', err);
+        }
+    });
+}
+
+// ===========================================================
+// 6) FUNCIONES PARA MODALES Y LOGOUT
+// ===========================================================
+function showLogin() {
+    // Si abrimos el modal desde index.html, solo mostrará el login de alumnos.
+    // Pero si quisieras abrir directamente el login de profesores, 
+    // podrías llamar a: mostrarSolo('Profesor'); showLoginProfesor(); 
+    document.getElementById('loginModal').classList.remove('hidden');
+}
+
+function hideLogin() {
+    document.getElementById('loginModal').classList.add('hidden');
+}
+
+function showPerfil(alumno) {
+    const perfil = `
+        <img src="${alumno.img}" alt="Alumno">
+        <h3>${alumno.nombre} ${alumno.apellido || ""}</h3>
+        <div class="perfil-carrera">${alumno.carrera || ""}</div>
+        <div class="perfil-descripcion">${alumno.descripcion || ""}</div>
+        <div class="perfil-email">Email: ${alumno.email || ""}</div>
+        <div class="perfil-telefono">Tel: ${alumno.telefono || ""}</div>
+    `;
+    document.getElementById('perfilContent').innerHTML = perfil;
+    document.getElementById('perfilModal').classList.remove('hidden');
+}
+
+function hidePerfil() {
+    document.getElementById('perfilModal').classList.add('hidden');
+}
+
+function logout() {
+    localStorage.removeItem('usuarioConectatec');
+    window.location.href = "acceso.html";
+}
