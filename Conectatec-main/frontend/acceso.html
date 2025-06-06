@@ -11,47 +11,82 @@
         <img src="img/logoconectatec.png" alt="Logo Conectatec" class="logo-img acceso-logo">
         <h2 class="acceso-titulo">Ingresá a Conectatec</h2>
 
-        <!-- Login Form -->
-        <form id="loginForm" class="acceso-form">
-            <input type="email" id="loginEmail" placeholder="Email" required>
-            <input type="password" id="loginPassword" placeholder="Contraseña" required>
-            <button type="submit" class="primary-btn acceso-btn">Iniciar sesión</button>
-        </form>
-        <div id="loginMessage" class="acceso-msg"></div>
-        <p class="acceso-link">
-            ¿No tenés cuenta?
-            <a href="#" onclick="mostrarRegistro(); return false;">Registrate aquí</a>
-        </p>
+        <!-- Botones para cambiar entre Alumno y Profesor -->
+        <div class="tabs">
+            <button id="tabAlumno" class="tab-btn active">Alumno</button>
+            <button id="tabProfesor" class="tab-btn">Profesor/Empresa</button>
+        </div>
 
-        <!-- Registro -->
-        <div id="registerDiv" class="hidden acceso-form">
-            <h3>Registro de Alumno</h3>
-            <form id="registerForm">
-                <input type="text" id="regNombre" placeholder="Nombre" required>
-                <input type="text" id="regApellido" placeholder="Apellido" required>
-                <input type="email" id="regEmail" placeholder="Email" required>
-                <input type="password" id="regPassword" placeholder="Contraseña" required>
-
-                <!-- Desplegable para seleccionar Colegio -->
-                <select id="regColegio" required>
-                    <option value="">Seleccioná tu colegio</option>
-                    <!-- JS agregará aquí las opciones -->
-                </select>
-
-                <!-- Desplegable para seleccionar Centro (opcional) -->
-                <select id="regCentro">
-                    <option value="">Seleccioná tu centro (opcional)</option>
-                    <!-- JS agregará aquí las opciones -->
-                </select>
-
-                <input type="text" id="regCarrera" placeholder="Carrera" required>
-                <input type="text" id="regDescripcion" placeholder="Descripción (opcional)">
-                <input type="text" id="regTelefono" placeholder="Teléfono">
-                <button type="submit" class="primary-btn acceso-btn">Registrarme</button>
+        <!-- 1) LOGIN ALUMNO -->
+        <div id="loginAlumnoDiv">
+            <form id="loginAlumnoForm" class="acceso-form">
+                <input type="email" id="loginAlumnoEmail" placeholder="Email" required>
+                <input type="password" id="loginAlumnoPassword" placeholder="Contraseña" required>
+                <button type="submit" class="primary-btn acceso-btn">Iniciar sesión (Alumno)</button>
             </form>
-            <div id="registerMessage" class="acceso-msg"></div>
+            <div id="loginAlumnoMessage" class="acceso-msg"></div>
             <p class="acceso-link">
-                <a href="#" onclick="ocultarRegistro(); return false;">Volver a iniciar sesión</a>
+                ¿No tenés cuenta de alumno?
+                <a href="#" onclick="mostrarRegistroAlumno(); return false;">Registrate</a>
+            </p>
+        </div>
+
+        <!-- 2) LOGIN PROFESOR -->
+        <div id="loginProfesorDiv" class="hidden">
+            <form id="loginProfesorForm" class="acceso-form">
+                <input type="email" id="loginProfesorEmail" placeholder="Email" required>
+                <input type="password" id="loginProfesorPassword" placeholder="Contraseña" required>
+                <button type="submit" class="primary-btn acceso-btn">Iniciar sesión (Profesor)</button>
+            </form>
+            <div id="loginProfesorMessage" class="acceso-msg"></div>
+            <p class="acceso-link">
+                ¿No tenés cuenta de profesor?
+                <a href="#" onclick="mostrarRegistroProfesor(); return false;">Registrate</a>
+            </p>
+        </div>
+
+        <!-- 3) REGISTRO ALUMNO -->
+        <div id="registerAlumnoDiv" class="hidden acceso-form">
+            <h3>Registro de Alumno</h3>
+            <form id="registerAlumnoForm">
+                <!-- Los mismos campos que ya tenías para alumno -->
+                <input type="text" id="regAlumnoNombre" placeholder="Nombre" required>
+                <input type="text" id="regAlumnoApellido" placeholder="Apellido" required>
+                <input type="email" id="regAlumnoEmail" placeholder="Email" required>
+                <input type="password" id="regAlumnoPassword" placeholder="Contraseña" required>
+                <!-- Desplegables de colegios/centros, carrera, etc. -->
+                <select id="regAlumnoColegio" required>
+                    <option value="">Seleccioná tu colegio</option>
+                </select>
+                <select id="regAlumnoCentro">
+                    <option value="">Seleccioná tu centro (opcional)</option>
+                </select>
+                <input type="text" id="regAlumnoCarrera" placeholder="Carrera" required>
+                <input type="text" id="regAlumnoDescripcion" placeholder="Descripción (opcional)">
+                <input type="text" id="regAlumnoTelefono" placeholder="Teléfono">
+                <button type="submit" class="primary-btn acceso-btn">Registrarme (Alumno)</button>
+            </form>
+            <div id="registerAlumnoMessage" class="acceso-msg"></div>
+            <p class="acceso-link">
+                <a href="#" onclick="ocultarRegistroAlumno(); return false;">Volver al login de alumnos</a>
+            </p>
+        </div>
+
+        <!-- 4) REGISTRO PROFESOR -->
+        <div id="registerProfesorDiv" class="hidden acceso-form">
+            <h3>Registro de Profesor/Empresa</h3>
+            <form id="registerProfesorForm">
+                <input type="text" id="regProfesorNombre" placeholder="Nombre completo" required>
+                <input type="email" id="regProfesorEmail" placeholder="Email" required>
+                <input type="password" id="regProfesorPassword" placeholder="Contraseña" required>
+                <input type="text" id="regProfesorInstitucion" placeholder="Institución/Empresa" required>
+                <input type="text" id="regProfesorCargo" placeholder="Cargo/Área (opcional)">
+                <input type="text" id="regProfesorTelefono" placeholder="Teléfono">
+                <button type="submit" class="primary-btn acceso-btn">Registrarme (Profesor)</button>
+            </form>
+            <div id="registerProfesorMessage" class="acceso-msg"></div>
+            <p class="acceso-link">
+                <a href="#" onclick="ocultarRegistroProfesor(); return false;">Volver al login de profesores</a>
             </p>
         </div>
     </div>
