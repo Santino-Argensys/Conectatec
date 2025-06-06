@@ -314,6 +314,67 @@ app.get('/api/centros', async (req, res) => {
   }
 });
 
+// ————————————————————————————————————————————————
+// RUTA 1: Registro de profesor/empresa
+// ————————————————————————————————————————————————
+app.post('/api/profesores/registro', async (req, res) => {
+  const { nombre_completo, email, password, institucion, cargo, telefono } = req.body;
+
+  // Validación mínima
+  if (!nombre_completo || !email || !password) {
+    return res.status(400).json({ error: "Faltan datos obligatorios (nombre_completo, email, password)." });
+  }
+
+  try {
+    const result = await db.query(
+      `INSERT INTO profesores 
+         (nombre_completo, email, password, institucion, cargo, telefono) 
+       VALUES ($1, $2, $3, $4, $5, $6) 
+       RETURNING id;`,
+      [nombre_completo, email, password, institucion || null, cargo || null, telefono || null]
+    );
+    res.status(201).json({
+      id: result.rows[0].id,
+      message: "Profesor/Empresa registrado exitosamente"
+    });
+  } catch (error) {
+    console.error('Error en POST /api/profesores/registro:', error);
+    if (error.code === '23505') {
+      // Email duplicado
+      res.status(409).json({ error: "El email ya está registrado" });
+    } else {
+      res.status(500).json({ error: "Error interno al registrar profesor/empresa" });
+    }
+  }
+});
+
+// ————————————————————————————————————————————————
+// RUTA 2: Login de profesor/empresa
+// ————————————————————————————————————————————————
+app.post('/api/profesores/login', async (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) {
+    return res.status(400).json({ error: "Faltan datos (email, password)." });
+  }
+
+  try {
+    const result = await db.query(
+      `SELECT id, nombre_completo, email, institucion, cargo, telefono 
+       FROM profesores 
+       WHERE email = $1 AND password = $2;`,
+      [email, password]
+    );
+    if (result.rows.length > 0) {
+      res.json({ user: result.rows[0], tipo: "profesor" });
+    } else {
+      res.status(401).json({ error: "Credenciales incorrectas" });
+    }
+  } catch (error) {
+    console.error('Error en POST /api/profesores/login:', error);
+    res.status(500).json({ error: "Error interno al iniciar sesión de profesor/empresa" });
+  }
+});
+
 /*
   =========================================================================
   3) RUTA ESPECIAL PARA SERVIR EL “ANTIGUO FRONTEND” (/bolsa/…)
