@@ -16,7 +16,27 @@
             window.location.href = "acceso.html";
         }
     </script>
-
+     <script>
+  const session = JSON.parse(localStorage.getItem('usuarioConectatec'));
+  if (!session || !session.user) {
+    // no está autenticado → redirigir a acceso.html
+    window.location.href = "acceso.html";
+  }
+  // Si existe, podría tener: session.tipo === "alumno" o "profesor"
+  if (session.tipo === "profesor") {
+    // Redirigir a una sección de “panel de empresas” o mostrarles un mensaje distinto:
+    // Por ejemplo, podrías llevarlos a /empresa.html o simplemente ocultar la sección de alumnos.
+    // Para este ejemplo, supongamos que quieres ocultar el grid de alumnos:
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('alumnosSection').style.display = 'none';
+      // Y en su lugar mostrar un mensaje:
+      const cont = document.createElement('div');
+      cont.innerHTML = "<h2>Bienvenido, Profesor/Empresa</h2><p>Desde aquí podrás gestionar tus contactos con alumnos.</p>";
+      document.querySelector('main').prepend(cont);
+    });
+  }
+  // Si es tipo "alumno", que se cargue todo normalmente.
+</script>
     <header>
         <div class="container header-flex">
             <div class="logo-area">
