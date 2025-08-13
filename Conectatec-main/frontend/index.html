@@ -1,120 +1,109 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Conectatec - Bolsa de Trabajo Técnica</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Montserrat:wght@500;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6371849319953324"
-     crossorigin="anonymous"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Conectatec - Bolsa de Trabajo Técnica</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Montserrat:wght@500;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6371849319953324" crossorigin="anonymous"></script>
 </head>
 <body>
-    <script>
-        // Verificar sesión, si no hay redirigir al login
-        const session = JSON.parse(localStorage.getItem('usuarioConectatec'));
-        const user = session && session.user;
-        if (!user || !user.id) {
-            window.location.href = "acceso.html";
-        }
-    </script>
-     <script>
-  const session = JSON.parse(localStorage.getItem('usuarioConectatec'));
-  if (!session || !session.user) {
-    // no está autenticado → redirigir a acceso.html
-    window.location.href = "acceso.html";
-  }
-  // Si existe, podría tener: session.tipo === "alumno" o "profesor"
-  if (session.tipo === "profesor") {
-    // Redirigir a una sección de “panel de empresas” o mostrarles un mensaje distinto:
-    // Por ejemplo, podrías llevarlos a /empresa.html o simplemente ocultar la sección de alumnos.
-    // Para este ejemplo, supongamos que quieres ocultar el grid de alumnos:
-    document.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('alumnosSection').style.display = 'none';
-      // Y en su lugar mostrar un mensaje:
-      const cont = document.createElement('div');
-      cont.innerHTML = "<h2>Bienvenido, Profesor/Empresa</h2><p>Desde aquí podrás gestionar tus contactos con alumnos.</p>";
-      document.querySelector('main').prepend(cont);
-    });
-  }
-  // Si es tipo "alumno", que se cargue todo normalmente.
-</script>
-    <header>
-        <div class="container header-flex">
-            <div class="logo-area">
-                <img src="img/logoconectatec.png" alt="Logo Conectatec" class="logo-img">
-                <span class="brand">Conectatec</span>
-            </div>
-            <nav>
-                <a href="#" class="active">Inicio</a>
-                <a href="#">Empresas</a>
-                <a href="perfil.html">Mi perfil</a>
-                <a href="#" class="logout-btn" onclick="logout()">Cerrar sesión</a>
-            </nav>
-        </div>
-    </header>
+  <script>
+    // Verificar sesión: si no hay, redirigir a login
+    const session = JSON.parse(localStorage.getItem('usuarioConectatec'));
+    const user = session && session.user;
+    if (!user || !user.id) {
+      window.location.href = "acceso.html";
+    }
 
-    <main>
-        <!-- LANDING -->
-        <section class="landing">
-            <div class="landing-content">
-                <h1>Impulsa tu futuro técnico</h1>
-                <p>Conectamos alumnos de escuelas técnicas con las mejores empresas para que su talento llegue más lejos.</p>
-                <button class="primary-btn" onclick="showLogin()">Ingresar / Registrarse</button>
-            </div>
-            <img src="img/banner_conectatec.svg" alt="Banner Conectatec" class="landing-banner">
-        </section>
+    // Si es profesor, opcionalmente ocultamos la grilla
+    if (session && session.tipo === "profesor") {
+      document.addEventListener('DOMContentLoaded', () => {
+        const alumnosSection = document.getElementById('alumnosSection');
+        if (alumnosSection) alumnosSection.style.display = 'none';
+        const cont = document.createElement('div');
+        cont.innerHTML = "<h2>Bienvenido, Profesor/Empresa</h2><p>Desde aquí podrás gestionar tus contactos con alumnos.</p>";
+        document.querySelector('main').prepend(cont);
+      });
+    }
+  </script>
 
-        <!-- LOGIN MODAL -->
-        <div id="loginModal" class="modal hidden">
-            <div class="modal-content login-modal">
-                <span class="close" onclick="hideLogin()">&times;</span>
-                <h2>Iniciar sesión</h2>
-                <form id="loginForm">
-                    <label for="loginEmail">Email</label>
-                    <input type="email" id="loginEmail" required>
-                    <label for="loginPassword">Contraseña</label>
-                    <input type="password" id="loginPassword" required>
-                    <button type="submit" class="primary-btn">Entrar</button>
-                </form>
-                <div id="loginMessage"></div>
-            </div>
-        </div>
+  <header>
+    <div class="container header-flex">
+      <div class="logo-area">
+        <img src="img/logoconectatec.png" alt="Logo Conectatec" class="logo-img">
+        <span class="brand">Conectatec</span>
+      </div>
+      <nav>
+        <a href="#" class="active">Inicio</a>
+        <a href="#">Empresas</a>
+        <a href="perfil.html">Mi perfil</a>
+        <a href="#" class="logout-btn" onclick="logout()">Cerrar sesión</a>
+      </nav>
+    </div>
+  </header>
 
-        <!-- LISTADO DE ALUMNOS -->
-        <section id="alumnosSection">
-            <div class="alumnos-header">
-                <h2>Alumnos en búsqueda laboral</h2>
+  <main>
+    <!-- LANDING -->
+    <section class="landing">
+      <div class="landing-content">
+        <h1>Impulsa tu futuro técnico</h1>
+        <p>Conectamos alumnos de escuelas técnicas con las mejores empresas para que su talento llegue más lejos.</p>
+        <button class="primary-btn" onclick="showLogin()">Ingresar / Registrarse</button>
+      </div>
+      <img src="img/banner_conectatec.svg" alt="Banner Conectatec" class="landing-banner">
+    </section>
 
-                <!-- Nuevos filtros: Colegio y Centro -->
-                <select id="filtroColegio">
-                    <option value="">Todos los colegios</option>
-                </select>
-                <select id="filtroCentro">
-                    <option value="">Todos los centros</option>
-                </select>
+    <!-- LOGIN MODAL -->
+    <div id="loginModal" class="modal hidden">
+      <div class="modal-content login-modal">
+        <span class="close" onclick="hideLogin()">&times;</span>
+        <h2>Iniciar sesión</h2>
+        <form id="loginForm">
+          <label for="loginEmail">Email</label>
+          <input type="email" id="loginEmail" required>
+          <label for="loginPassword">Contraseña</label>
+          <input type="password" id="loginPassword" required>
+          <button type="submit" class="primary-btn">Entrar</button>
+        </form>
+        <div id="loginMessage"></div>
+      </div>
+    </div>
 
-                <!-- Búsqueda por nombre/carrera -->
-                <input type="text" id="busquedaAlumno" placeholder="Buscar por nombre o carrera...">
-            </div>
-            <div id="alumnosGrid" class="alumnos-grid"></div>
-        </section>
+    <!-- LISTADO DE ALUMNOS -->
+    <section id="alumnosSection">
+      <div class="alumnos-header">
+        <h2>Alumnos en búsqueda laboral</h2>
 
-        <!-- MODAL PERFIL -->
-        <div id="perfilModal" class="modal hidden">
-            <div class="modal-content perfil-modal">
-                <span class="close" onclick="hidePerfil()">&times;</span>
-                <div id="perfilContent"></div>
-            </div>
-        </div>
-    </main>
+        <!-- Filtros -->
+        <select id="filtroColegio">
+          <option value="">Todos los colegios</option>
+        </select>
+        <select id="filtroCentro">
+          <option value="">Todos los centros</option>
+        </select>
 
-    <footer>
-        <div class="container">
-            <span>&copy; 2024 Conectatec. Todos los derechos reservados.</span>
-        </div>
-    </footer>
+        <input type="text" id="busquedaAlumno" placeholder="Buscar por nombre o carrera...">
+      </div>
+      <div id="alumnosGrid" class="alumnos-grid"></div>
+    </section>
 
-    <script src="script.js"></script>
+    <!-- MODAL PERFIL -->
+    <div id="perfilModal" class="modal hidden">
+      <div class="modal-content perfil-modal">
+        <span class="close" onclick="hidePerfil()">&times;</span>
+        <div id="perfilContent"></div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <span>&copy; 2024 Conectatec. Todos los derechos reservados.</span>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
