@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const db = require('./db');
 const path = require('path');
+const multer = require('multer');
 
 const app = express();
 app.use(cors());
@@ -38,6 +39,40 @@ app.use(express.static(rutaInfo));
   2) RUTAS DE LA API (/api/...)
   ===================================================================
 */
+
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/');
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname));
+  }
+});
+
+const upload = multer({ storage });
+
+app.post('/upload', upload.fields([
+  { name: 'foto', maxCount: 1 },
+  { name: 'cv', maxCount: 1 }
+]), async (req, res) => {
+  try {
+    const { userId } = req.body;
+    const fotoPath = req.files.foto ? `/uploads/${req.files.foto[0].filename}` : null;
+    const cvPath = req.files.cv ? `/uploads/${req.files.cv[0].filename}` : null;
+
+    await db.query(
+      'UPDATE usuarios SET foto_url = $1, cv_url = $2 WHERE id = $3',
+      [fotoPath, cvPath, userId]
+    );
+
+    res.json({ success: true, foto: fotoPath, cv: cvPath });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error al subir archivos' });
+  }
+});
+
 
 // 2.1) Login de alumno
 app.post('/api/alumnos/login', async (req, res) => {
@@ -418,3 +453,4 @@ app.get(/^\/(?!api|bolsa).*/, (req, res) => {
 */
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => console.log(`Servidor corriendo en puerto ${PORT}`));
+
