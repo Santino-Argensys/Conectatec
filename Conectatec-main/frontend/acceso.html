@@ -1,98 +1,109 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Conectatec - Acceso</title>
-    <link rel="stylesheet" href="style.css">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6371849319953324"
-     crossorigin="anonymous"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Conectatec - Acceso</title>
+  <link rel="stylesheet" href="style.css" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6371849319953324" crossorigin="anonymous"></script>
 </head>
 <body class="acceso-bg">
-    <div class="acceso-container">
-        <img src="img/logoconectatec.png" alt="Logo Conectatec" class="logo-img acceso-logo">
-        <h2 class="acceso-titulo">Ingresá a Conectatec</h2>
+  <div class="acceso-container">
+    <img src="img/logoconectatec.png" alt="Logo Conectatec" class="logo-img acceso-logo" />
+    <h2 class="acceso-titulo">Ingresá a Conectatec</h2>
 
-        <!-- Botones para cambiar entre Alumno y Profesor -->
-        <div class="tabs">
-            <button id="tabAlumno" class="tab-btn active">Alumno</button>
-            <button id="tabProfesor" class="tab-btn">Profesor/Empresa</button>
-        </div>
-
-        <!-- 1) LOGIN ALUMNO -->
-        <div id="loginAlumnoDiv">
-            <form id="loginAlumnoForm" class="acceso-form">
-                <input type="email" id="loginAlumnoEmail" placeholder="Email" required>
-                <input type="password" id="loginAlumnoPassword" placeholder="Contraseña" required>
-                <button type="submit" class="primary-btn acceso-btn">Iniciar sesión (Alumno)</button>
-            </form>
-            <div id="loginAlumnoMessage" class="acceso-msg"></div>
-            <p class="acceso-link">
-                ¿No tenés cuenta de alumno?
-                <a href="#" onclick="mostrarRegistroAlumno(); return false;">Registrate</a>
-            </p>
-        </div>
-
-        <!-- 2) LOGIN PROFESOR -->
-        <div id="loginProfesorDiv" class="hidden">
-            <form id="loginProfesorForm" class="acceso-form">
-                <input type="email" id="loginProfesorEmail" placeholder="Email" required>
-                <input type="password" id="loginProfesorPassword" placeholder="Contraseña" required>
-                <button type="submit" class="primary-btn acceso-btn">Iniciar sesión (Profesor)</button>
-            </form>
-            <div id="loginProfesorMessage" class="acceso-msg"></div>
-            <p class="acceso-link">
-                ¿No tenés cuenta de profesor?
-                <a href="#" onclick="mostrarRegistroProfesor(); return false;">Registrate</a>
-            </p>
-        </div>
-
-        <!-- 3) REGISTRO ALUMNO -->
-        <div id="registerAlumnoDiv" class="hidden acceso-form">
-            <h3>Registro de Alumno</h3>
-            <form id="registerAlumnoForm">
-                
-                <input type="text" id="regAlumnoNombre" placeholder="Nombre" required>
-                <input type="text" id="regAlumnoApellido" placeholder="Apellido" required>
-                <input type="email" id="regAlumnoEmail" placeholder="Email" required>
-                <input type="password" id="regAlumnoPassword" placeholder="Contraseña" required>
-                <!-- Desplegables de colegios/centros, carrera, etc. -->
-                <select id="regAlumnoColegio" required>
-                    <option value="">Seleccioná tu colegio</option>
-                </select>
-                <select id="regAlumnoCentro">
-                    <option value="">Seleccioná tu centro (opcional)</option>
-                </select>
-                <input type="text" id="regAlumnoCarrera" placeholder="Carrera" required>
-                <input type="text" id="regAlumnoDescripcion" placeholder="Descripción (opcional)">
-                <input type="text" id="regAlumnoTelefono" placeholder="Teléfono">
-                <button type="submit" class="primary-btn acceso-btn">Registrarme (Alumno)</button>
-            </form>
-            <div id="registerAlumnoMessage" class="acceso-msg"></div>
-            <p class="acceso-link">
-                <a href="#" onclick="ocultarRegistroAlumno(); return false;">Volver al login de alumnos</a>
-            </p>
-        </div>
-
-        <!-- 4) REGISTRO PROFESOR -->
-        <div id="registerProfesorDiv" class="hidden acceso-form">
-            <h3>Registro de Profesor/Empresa</h3>
-            <form id="registerProfesorForm">
-                <input type="text" id="regProfesorNombre" placeholder="Nombre completo" required>
-                <input type="email" id="regProfesorEmail" placeholder="Email" required>
-                <input type="password" id="regProfesorPassword" placeholder="Contraseña" required>
-                <input type="text" id="regProfesorInstitucion" placeholder="Institución/Empresa" required>
-                <input type="text" id="regProfesorCargo" placeholder="Cargo/Área (opcional)">
-                <input type="text" id="regProfesorTelefono" placeholder="Teléfono">
-                <button type="submit" class="primary-btn acceso-btn">Registrarme (Profesor)</button>
-            </form>
-            <div id="registerProfesorMessage" class="acceso-msg"></div>
-            <p class="acceso-link">
-                <a href="#" onclick="ocultarRegistroProfesor(); return false;">Volver al login de profesores</a>
-            </p>
-        </div>
+    <!-- Tabs -->
+    <div class="tabs">
+      <button id="tabAlumno" class="tab-btn active">Alumno</button>
+      <button id="tabProfesor" class="tab-btn">Profesor/Empresa</button>
     </div>
 
-    <script src="acceso.js"></script>
+    <!-- 1) LOGIN ALUMNO -->
+    <div id="loginAlumnoDiv">
+      <form id="loginAlumnoForm" class="acceso-form">
+        <input type="email" id="loginAlumnoEmail" placeholder="Email" required />
+        <input type="password" id="loginAlumnoPassword" placeholder="Contraseña" required />
+        <button type="submit" class="primary-btn acceso-btn">Iniciar sesión (Alumno)</button>
+      </form>
+      <div id="loginAlumnoMessage" class="acceso-msg"></div>
+      <p class="acceso-link">
+        ¿No tenés cuenta de alumno?
+        <a href="#" id="linkRegistroAlumno">Registrate</a>
+      </p>
+    </div>
+
+    <!-- 2) LOGIN PROFESOR -->
+    <div id="loginProfesorDiv" class="hidden">
+      <form id="loginProfesorForm" class="acceso-form">
+        <input type="email" id="loginProfesorEmail" placeholder="Email" required />
+        <input type="password" id="loginProfesorPassword" placeholder="Contraseña" required />
+        <button type="submit" class="primary-btn acceso-btn">Iniciar sesión (Profesor)</button>
+      </form>
+      <div id="loginProfesorMessage" class="acceso-msg"></div>
+      <p class="acceso-link">
+        ¿No tenés cuenta de profesor?
+        <a href="#" id="linkRegistroProfesor">Registrate</a>
+      </p>
+    </div>
+
+    <!-- 3) REGISTRO ALUMNO -->
+    <div id="registerAlumnoDiv" class="hidden acceso-form">
+      <h3>Registro de Alumno</h3>
+
+      <!-- Importante para archivos -->
+      <form id="registerAlumnoForm" enctype="multipart/form-data">
+        <input type="text" id="regAlumnoNombre" placeholder="Nombre" required />
+        <input type="text" id="regAlumnoApellido" placeholder="Apellido" required />
+        <input type="email" id="regAlumnoEmail" placeholder="Email" required />
+        <input type="password" id="regAlumnoPassword" placeholder="Contraseña" required />
+
+        <select id="regAlumnoColegio" required>
+          <option value="">Seleccioná tu colegio</option>
+        </select>
+        <select id="regAlumnoCentro">
+          <option value="">Seleccioná tu centro (opcional)</option>
+        </select>
+
+        <input type="text" id="regAlumnoCarrera" placeholder="Carrera" required />
+        <input type="text" id="regAlumnoDescripcion" placeholder="Descripción (opcional)" />
+        <input type="text" id="regAlumnoTelefono" placeholder="Teléfono" />
+
+        <!-- NUEVO: foto y CV -->
+        <label class="acceso-label">Foto de perfil (JPG/PNG/WEBP):</label>
+        <input type="file" id="regAlumnoFoto" accept="image/png,image/jpeg,image/webp" />
+        <img id="regAlumnoFotoPreview" class="avatar-preview" alt="" style="display:none;max-width:120px;border-radius:8px;margin:6px 0"/>
+
+        <label class="acceso-label">Currículum (PDF):</label>
+        <input type="file" id="regAlumnoCV" accept="application/pdf" />
+
+        <button type="submit" class="primary-btn acceso-btn">Registrarme (Alumno)</button>
+      </form>
+
+      <div id="registerAlumnoMessage" class="acceso-msg"></div>
+      <p class="acceso-link">
+        <a href="#" id="linkVolverLoginAlumno">Volver al login de alumnos</a>
+      </p>
+    </div>
+
+    <!-- 4) REGISTRO PROFESOR -->
+    <div id="registerProfesorDiv" class="hidden acceso-form">
+      <h3>Registro de Profesor/Empresa</h3>
+      <form id="registerProfesorForm">
+        <input type="text" id="regProfesorNombre" placeholder="Nombre completo" required />
+        <input type="email" id="regProfesorEmail" placeholder="Email" required />
+        <input type="password" id="regProfesorPassword" placeholder="Contraseña" required />
+        <input type="text" id="regProfesorInstitucion" placeholder="Institución/Empresa" required />
+        <input type="text" id="regProfesorCargo" placeholder="Cargo/Área (opcional)" />
+        <input type="text" id="regProfesorTelefono" placeholder="Teléfono" />
+        <button type="submit" class="primary-btn acceso-btn">Registrarme (Profesor)</button>
+      </form>
+      <div id="registerProfesorMessage" class="acceso-msg"></div>
+      <p class="acceso-link">
+        <a href="#" id="linkVolverLoginProfesor">Volver al login de profesores</a>
+      </p>
+    </div>
+  </div>
+
+  <script src="acceso.js"></script>
 </body>
 </html>
