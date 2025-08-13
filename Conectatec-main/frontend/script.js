@@ -1,219 +1,220 @@
 // ===========================================================
 // 1) VARIABLES GLOBALES
 // ===========================================================
-let alumnosGlobal = [];  // Guardaremos la lista completa de alumnos aquí
-let colegiosGlobal = []; // Lista de colegios para poblar el select
-let centrosGlobal = [];  // Lista de centros para poblar el select
+let alumnosGlobal = [];  // lista completa
+let colegiosGlobal = [];
+let centrosGlobal  = [];
+
+// Helpers de imagen
+function photoUrlFor(alumno) {
+  // Endpoint del backend que sirve la foto desde Postgres (BYTEA)
+  return `/api/users/${alumno.id}/photo`;
+}
+function placeholderFor(alumno) {
+  // Alterna por id para variedad
+  return (Number(alumno.id) % 2 === 0)
+    ? "img/student_placeholder_male.svg"
+    : "img/student_placeholder_female.svg";
+}
 
 // ===========================================================
 // 2) CARGAR COLEGIOS Y CENTROS PARA LOS FILTROS
 // ===========================================================
 async function cargarColegiosFiltro() {
-    try {
-        // Se usa ruta relativa en lugar de la URL absoluta
-        const res = await fetch('/api/colegios');
-        if (!res.ok) throw new Error('Error al obtener colegios');
-        colegiosGlobal = await res.json();
-        const select = document.getElementById('filtroColegio');
-
-        colegiosGlobal.forEach(colegio => {
-            const opt = document.createElement('option');
-            opt.value = colegio.id;
-            opt.textContent = colegio.nombre;
-            select.appendChild(opt);
-        });
-    } catch (err) {
-        console.error('Error cargando colegios:', err);
-        // Podrías mostrar un mensaje en pantalla si lo deseas
-    }
+  try {
+    const res = await fetch('/api/colegios');
+    if (!res.ok) throw new Error('Error al obtener colegios');
+    colegiosGlobal = await res.json();
+    const select = document.getElementById('filtroColegio');
+    colegiosGlobal.forEach(colegio => {
+      const opt = document.createElement('option');
+      opt.value = colegio.id;
+      opt.textContent = colegio.nombre;
+      select.appendChild(opt);
+    });
+  } catch (err) {
+    console.error('Error cargando colegios:', err);
+  }
 }
 
 async function cargarCentrosFiltro() {
-    try {
-        // Se usa ruta relativa en lugar de la URL absoluta
-        const res = await fetch('/api/centros');
-        if (!res.ok) throw new Error('Error al obtener centros');
-        centrosGlobal = await res.json();
-        const select = document.getElementById('filtroCentro');
-
-        centrosGlobal.forEach(centro => {
-            const opt = document.createElement('option');
-            opt.value = centro.id;
-            opt.textContent = centro.nombre;
-            select.appendChild(opt);
-        });
-    } catch (err) {
-        console.error('Error cargando centros:', err);
-        // Podrías mostrar un mensaje en pantalla si lo deseas
-    }
+  try {
+    const res = await fetch('/api/centros');
+    if (!res.ok) throw new Error('Error al obtener centros');
+    centrosGlobal = await res.json();
+    const select = document.getElementById('filtroCentro');
+    centrosGlobal.forEach(centro => {
+      const opt = document.createElement('option');
+      opt.value = centro.id;
+      opt.textContent = centro.nombre;
+      select.appendChild(opt);
+    });
+  } catch (err) {
+    console.error('Error cargando centros:', err);
+  }
 }
 
 // ===========================================================
 // 3) OBTENER Y RENDERIZAR ALUMNOS
 // ===========================================================
 async function fetchAlumnos() {
-    try {
-        // Se usa ruta relativa en lugar de la URL absoluta
-        const response = await fetch('/api/alumnos');
-        if (!response.ok) throw new Error('Error al obtener alumnos');
-        const alumnos = await response.json();
+  try {
+    const response = await fetch('/api/alumnos');
+    if (!response.ok) throw new Error('Error al obtener alumnos');
+    const alumnos = await response.json();
 
-        // Agregar una imagen placeholder si no tienen "img" en el objeto
-        alumnosGlobal = alumnos.map((alumno, idx) => ({
-            ...alumno,
-            img: alumno.img || (idx % 2 === 0
-                ? "img/student_placeholder_male.svg"
-                : "img/student_placeholder_female.svg")
-        }));
+    // Guardamos tal cual vienen; resolvemos foto/placeholder al renderizar
+    alumnosGlobal = alumnos;
 
-        // Mostrar inicialmente todos los alumnos
-        actualizarListado();
-    } catch (err) {
-        document.getElementById('alumnosGrid').innerHTML =
-          `<p style="color:#a00">No se pudo cargar la lista de alumnos.</p>`;
-        console.error(err);
-    }
+    actualizarListado();
+  } catch (err) {
+    document.getElementById('alumnosGrid').innerHTML =
+      `<p style="color:#a00">No se pudo cargar la lista de alumnos.</p>`;
+    console.error(err);
+  }
 }
 
 // ===========================================================
-// 4) FUNCIONES DE FILTRADO Y RENDERIZADO
+// 4) FILTRADO Y RENDER
 // ===========================================================
 function filterAlumnos() {
-    const filtroColegio = document.getElementById('filtroColegio').value;
-    const filtroCentro = document.getElementById('filtroCentro').value;
-    const textoBusqueda = document.getElementById('busquedaAlumno').value.trim().toLowerCase();
+  const filtroColegio  = document.getElementById('filtroColegio').value;
+  const filtroCentro   = document.getElementById('filtroCentro').value;
+  const textoBusqueda  = document.getElementById('busquedaAlumno').value.trim().toLowerCase();
 
-    return alumnosGlobal.filter(alumno => {
-        // Filtrar por colegio_id si se seleccionó uno
-        if (filtroColegio && String(alumno.colegio_id) !== filtroColegio) {
-            return false;
-        }
-        // Filtrar por centro_id si se seleccionó uno
-        if (filtroCentro && String(alumno.centro_id) !== filtroCentro) {
-            return false;
-        }
-        // Filtrar por texto (nombre + apellido o carrera)
-        if (textoBusqueda) {
-            const nombreCompleto = (alumno.nombre + " " + (alumno.apellido || "")).toLowerCase();
-            const carrera = (alumno.carrera || "").toLowerCase();
-            if (!nombreCompleto.includes(textoBusqueda) && !carrera.includes(textoBusqueda)) {
-                return false;
-            }
-        }
-        return true;
-    });
+  return alumnosGlobal.filter(alumno => {
+    if (filtroColegio && String(alumno.colegio_id) !== filtroColegio) return false;
+    if (filtroCentro  && String(alumno.centro_id)  !== filtroCentro)  return false;
+
+    if (textoBusqueda) {
+      const nombreCompleto = (alumno.nombre + " " + (alumno.apellido || "")).toLowerCase();
+      const carrera = (alumno.carrera || "").toLowerCase();
+      if (!nombreCompleto.includes(textoBusqueda) && !carrera.includes(textoBusqueda)) {
+        return false;
+      }
+    }
+    return true;
+  });
 }
 
 function actualizarListado() {
-    const filtrados = filterAlumnos();
-    renderAlumnosGrid(filtrados);
+  const filtrados = filterAlumnos();
+  renderAlumnosGrid(filtrados);
 }
 
-// Renderiza las tarjetas de alumnos en el grid
 function renderAlumnosGrid(list) {
-    const grid = document.getElementById('alumnosGrid');
-    grid.innerHTML = "";
-    if (!list.length) {
-        grid.innerHTML = "<p>No se encontraron alumnos.</p>";
-        return;
-    }
-    list.forEach((alumno, idx) => {
-        const card = document.createElement('div');
-        card.className = "alumno-card";
-        card.innerHTML = `
-            <img src="${alumno.img}" alt="Alumno">
-            <div class="alumno-nombre">${alumno.nombre} ${alumno.apellido || ""}</div>
-            <div class="alumno-carrera">${alumno.carrera || ""}</div>
-            <div class="alumno-descripcion">${alumno.descripcion || ""}</div>
-            <button class="ver-perfil-btn" data-idx="${idx}">Ver perfil</button>
-        `;
-        card.querySelector('.ver-perfil-btn').addEventListener('click', (e) => {
-            e.stopPropagation();
-            showPerfil(alumno);
-        });
-        grid.appendChild(card);
+  const grid = document.getElementById('alumnosGrid');
+  grid.innerHTML = "";
+  if (!list.length) {
+    grid.innerHTML = "<p>No se encontraron alumnos.</p>";
+    return;
+  }
+
+  list.forEach((alumno) => {
+    const card = document.createElement('div');
+    card.className = "alumno-card";
+
+    // Usamos la URL del backend y fallback por onerror
+    const imgUrl = photoUrlFor(alumno);
+    const fallback = placeholderFor(alumno);
+
+    card.innerHTML = `
+      <img src="${imgUrl}"
+           alt="Alumno"
+           onerror="this.onerror=null; this.src='${fallback}';" />
+      <div class="alumno-nombre">${alumno.nombre} ${alumno.apellido || ""}</div>
+      <div class="alumno-carrera">${alumno.carrera || ""}</div>
+      <div class="alumno-descripcion">${alumno.descripcion || ""}</div>
+      <button class="ver-perfil-btn">Ver perfil</button>
+    `;
+
+    card.querySelector('.ver-perfil-btn').addEventListener('click', (e) => {
+      e.stopPropagation();
+      showPerfil(alumno);
     });
+
+    grid.appendChild(card);
+  });
 }
 
 // ===========================================================
-// 5) EVENTOS AL CARGAR EL DOCUMENTO
+// 5) EVENTOS AL CARGAR
 // ===========================================================
 document.addEventListener('DOMContentLoaded', () => {
-    // 5.1) Cargar filtros de colegios y centros
-    cargarColegiosFiltro();
-    cargarCentrosFiltro();
+  cargarColegiosFiltro();
+  cargarCentrosFiltro();
+  fetchAlumnos();
 
-    // 5.2) Obtener y mostrar todos los alumnos
-    fetchAlumnos();
+  document.getElementById('filtroColegio').addEventListener('change', actualizarListado);
+  document.getElementById('filtroCentro').addEventListener('change', actualizarListado);
+  document.getElementById('busquedaAlumno').addEventListener('input', actualizarListado);
 
-    // 5.3) Listener: cada vez que cambie el select "Colegio" o "Centro", actualizar lista
-    document.getElementById('filtroColegio').addEventListener('change', actualizarListado);
-    document.getElementById('filtroCentro').addEventListener('change', actualizarListado);
+  document.getElementById('loginForm').addEventListener('submit', async function(e){
+    e.preventDefault();
+    const email = document.getElementById('loginEmail').value;
+    const pass  = document.getElementById('loginPassword').value;
+    const mensaje = document.getElementById('loginMessage');
+    mensaje.textContent = "";
 
-    // 5.4) Listener: al tipear en el buscador, actualizar lista
-    document.getElementById('busquedaAlumno').addEventListener('input', actualizarListado);
+    try {
+      const response = await fetch('/api/alumnos/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password: pass })
+      });
+      const data = await response.json();
 
-    // 5.5) Lógica de login dentro del modal
-    document.getElementById('loginForm').addEventListener('submit', async function(e){
-        e.preventDefault();
-        const email = document.getElementById('loginEmail').value;
-        const pass = document.getElementById('loginPassword').value;
-        const mensaje = document.getElementById('loginMessage');
-        mensaje.textContent = "";
-
-        try {
-            // Se usa ruta relativa en lugar de la URL absoluta
-            const response = await fetch('/api/alumnos/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password: pass })
-            });
-            const data = await response.json();
-
-            if (response.ok) {
-                mensaje.textContent = "¡Bienvenido/a!";
-                mensaje.style.color = "#0094d3";
-                setTimeout(hideLogin, 1200);
-            } else {
-                mensaje.textContent = data.error || "Credenciales incorrectas";
-                mensaje.style.color = "#d00";
-            }
-        } catch (err) {
-            mensaje.textContent = "Error de conexión al servidor.";
-            mensaje.style.color = "#d00";
-        }
-    });
+      if (response.ok) {
+        mensaje.textContent = "¡Bienvenido/a!";
+        mensaje.style.color = "#0094d3";
+        setTimeout(hideLogin, 1200);
+      } else {
+        mensaje.textContent = data.error || "Credenciales incorrectas";
+        mensaje.style.color = "#d00";
+      }
+    } catch (err) {
+      mensaje.textContent = "Error de conexión al servidor.";
+      mensaje.style.color = "#d00";
+    }
+  });
 });
 
 // ===========================================================
-// 6) FUNCIONES PARA MODALES Y LOGOUT
+// 6) MODALES, PERFIL Y LOGOUT
 // ===========================================================
 function showLogin() {
-    document.getElementById('loginModal').classList.remove('hidden');
+  document.getElementById('loginModal').classList.remove('hidden');
 }
-
 function hideLogin() {
-    document.getElementById('loginModal').classList.add('hidden');
+  document.getElementById('loginModal').classList.add('hidden');
 }
 
 function showPerfil(alumno) {
-    const perfil = `
-        <img src="${alumno.img}" alt="Alumno">
-        <h3>${alumno.nombre} ${alumno.apellido || ""}</h3>
-        <div class="perfil-carrera">${alumno.carrera || ""}</div>
-        <div class="perfil-descripcion">${alumno.descripcion || ""}</div>
-        <div class="perfil-email">Email: ${alumno.email || ""}</div>
-        <div class="perfil-telefono">Tel: ${alumno.telefono || ""}</div>
-    `;
-    document.getElementById('perfilContent').innerHTML = perfil;
-    document.getElementById('perfilModal').classList.remove('hidden');
+  const imgUrl = photoUrlFor(alumno);
+  const fallback = placeholderFor(alumno);
+  const cvUrl = `/api/users/${alumno.id}/cv`; // link al CV si existe en backend
+
+  const perfil = `
+    <img src="${imgUrl}" alt="Alumno"
+         onerror="this.onerror=null; this.src='${fallback}';">
+    <h3>${alumno.nombre} ${alumno.apellido || ""}</h3>
+    <div class="perfil-carrera">${alumno.carrera || ""}</div>
+    <div class="perfil-descripcion">${alumno.descripcion || ""}</div>
+    <div class="perfil-email">Email: ${alumno.email || ""}</div>
+    <div class="perfil-telefono">Tel: ${alumno.telefono || ""}</div>
+    <div class="perfil-cv">
+      <a href="${cvUrl}" target="_blank" rel="noreferrer">Ver/Descargar CV (PDF)</a>
+    </div>
+  `;
+  document.getElementById('perfilContent').innerHTML = perfil;
+  document.getElementById('perfilModal').classList.remove('hidden');
 }
 
 function hidePerfil() {
-    document.getElementById('perfilModal').classList.add('hidden');
+  document.getElementById('perfilModal').classList.add('hidden');
 }
 
 function logout() {
-    localStorage.removeItem('usuarioConectatec');
-    window.location.href = "acceso.html";
+  localStorage.removeItem('usuarioConectatec');
+  window.location.href = "acceso.html";
 }
