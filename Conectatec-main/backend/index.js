@@ -41,35 +41,109 @@ app.use(express.static(rutaInfo));
 */
 
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/');
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
+// ====== SUBIDAS A LA DB (BYTEA) ======
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 10 * 1024 * 1024 } // 10MB
+});
+
+/**
+ * POST /api/upload
+ * multipart/form-data:
+ *  - userId (ID del alumno)
+ *  - foto (image/png|jpeg|webp) [opcional]
+ *  - cv   (application/pdf)     [opcional]
+ */
+app.post('/api/upload', upload.fields([
+  { name: 'foto', maxCount: 1 },
+  { name: 'cv',   maxCount: 1 }
+]), async (req, res) => {
+  try {
+    const userId = Number(req.body.userId);
+    if (!userId) return res.status(400).json({ error: 'userId requerido' });
+
+    const f = (req.files?.foto || [])[0];
+    const c = (req.files?.cv   || [])[0];
+
+    const sets = [];
+    const vals = [];
+    let i = 1;
+
+    if (f) {
+      if (!/^image\/(png|jpeg|webp)$/.test(f.mimetype)) {
+        return res.status(415).json({ error: 'Foto inválida: use PNG/JPEG/WEBP' });
+      }
+      sets.push(`photo=$${i++}`, `photo_mime=$${i++}`, `photo_size=$${i++}`, `photo_updated_at=NOW()`);
+      vals.push(f.buffer, f.mimetype, f.size);
+    }
+
+    if (c) {
+      if (c.mimetype !== 'application/pdf') {
+        return res.status(415).json({ error: 'CV debe ser PDF' });
+      }
+      sets.push(`cv=$${i++}`, `cv_mime=$${i++}`, `cv_filename=$${i++}`, `cv_size=$${i++}`, `cv_updated_at=NOW()`);
+      vals.push(c.buffer, c.mimetype, c.originalname, c.size);
+    }
+
+    if (!sets.length) {
+      return res.status(400).json({ error: 'No se envió foto ni CV' });
+    }
+
+    vals.push(userId);
+    const sql = `UPDATE public.alumnos SET ${sets.join(', ')} WHERE id=$${i} RETURNING id`;
+    await db.query(sql, vals);
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Error /api/upload:', err);
+    res.status(500).json({ error: 'Upload failed' });
   }
 });
 
-const upload = multer({ storage });
-
-app.post('/upload', upload.fields([
-  { name: 'foto', maxCount: 1 },
-  { name: 'cv', maxCount: 1 }
-]), async (req, res) => {
+/**
+ * GET /api/users/:id/photo → devuelve imagen o 404
+ */
+app.get('/api/users/:id/photo', async (req, res) => {
   try {
-    const { userId } = req.body;
-    const fotoPath = req.files.foto ? `/uploads/${req.files.foto[0].filename}` : null;
-    const cvPath = req.files.cv ? `/uploads/${req.files.cv[0].filename}` : null;
-
-    await db.query(
-      'UPDATE usuarios SET foto_url = $1, cv_url = $2 WHERE id = $3',
-      [fotoPath, cvPath, userId]
+    const { rows } = await db.query(
+      `SELECT photo, photo_mime, photo_size, photo_updated_at
+       FROM public.alumnos WHERE id=$1`, [req.params.id]
     );
+    const r = rows[0];
+    if (!r || !r.photo) return res.status(404).end();
 
-    res.json({ success: true, foto: fotoPath, cv: cvPath });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Error al subir archivos' });
+    res.setHeader('Content-Type', r.photo_mime || 'application/octet-stream');
+    if (r.photo_size) res.setHeader('Content-Length', r.photo_size);
+    res.setHeader('Cache-Control', 'public, max-age=3600');
+    if (r.photo_updated_at) res.setHeader('ETag', String(new Date(r.photo_updated_at).getTime()));
+    res.send(r.photo);
+  } catch (e) {
+    console.error('GET photo error:', e);
+    res.status(500).end();
+  }
+});
+
+/**
+ * GET /api/users/:id/cv → devuelve PDF o 404
+ */
+app.get('/api/users/:id/cv', async (req, res) => {
+  try {
+    const { rows } = await db.query(
+      `SELECT cv, cv_mime, cv_filename, cv_size, cv_updated_at
+       FROM public.alumnos WHERE id=$1`, [req.params.id]
+    );
+    const r = rows[0];
+    if (!r || !r.cv) return res.status(404).end();
+
+    res.setHeader('Content-Type', r.cv_mime || 'application/pdf');
+    if (r.cv_size) res.setHeader('Content-Length', r.cv_size);
+    res.setHeader('Content-Disposition', `inline; filename="${r.cv_filename || 'cv.pdf'}"`);
+    res.setHeader('Cache-Control', 'public, max-age=3600');
+    if (r.cv_updated_at) res.setHeader('ETag', String(new Date(r.cv_updated_at).getTime()));
+    res.send(r.cv);
+  } catch (e) {
+    console.error('GET cv error:', e);
+    res.status(500).end();
   }
 });
 
@@ -453,4 +527,5 @@ app.get(/^\/(?!api|bolsa).*/, (req, res) => {
 */
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => console.log(`Servidor corriendo en puerto ${PORT}`));
+
 
