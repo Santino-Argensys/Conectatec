@@ -68,6 +68,22 @@ document.addEventListener('DOMContentLoaded', () => {
     // Asociamos los forms a sus funciones
     inicializarEventosAlumno();
     inicializarEventosProfesor();
+
+    // Preview de la foto (si el input existe en el HTML)
+    const fotoInput = document.getElementById('regAlumnoFoto');
+    const fotoPreview = document.getElementById('regAlumnoFotoPreview');
+    if (fotoInput && fotoPreview) {
+        fotoInput.addEventListener('change', (e) => {
+            const f = e.target.files?.[0];
+            if (f) {
+                fotoPreview.src = URL.createObjectURL(f);
+                fotoPreview.style.display = 'block';
+            } else {
+                fotoPreview.src = '';
+                fotoPreview.style.display = 'none';
+            }
+        });
+    }
 });
 
 // Función para mostrar solo los bloques que correspondan
@@ -114,21 +130,21 @@ function inicializarEventosAlumno() {
         document.getElementById('registerAlumnoMessage').textContent = '';
     };
 
-    // 4.3) Registro de alumno
+    // 4.3) Registro de alumno (+ subida opcional de foto y CV)
     document.getElementById('registerAlumnoForm').addEventListener('submit', async function(e) {
         e.preventDefault();
-        const nombre       = document.getElementById('regAlumnoNombre').value.trim();
-        const apellido     = document.getElementById('regAlumnoApellido').value.trim();
-        const email        = document.getElementById('regAlumnoEmail').value.trim();
-        const password     = document.getElementById('regAlumnoPassword').value;
+        const nombre        = document.getElementById('regAlumnoNombre').value.trim();
+        const apellido      = document.getElementById('regAlumnoApellido').value.trim();
+        const email         = document.getElementById('regAlumnoEmail').value.trim();
+        const password      = document.getElementById('regAlumnoPassword').value;
         const selectColegio = document.getElementById('regAlumnoColegio');
-        const colegio_id   = selectColegio.value ? Number(selectColegio.value) : null;
-        const selectCentro = document.getElementById('regAlumnoCentro');
-        const centro_id    = selectCentro.value ? Number(selectCentro.value) : null;
-        const carrera      = document.getElementById('regAlumnoCarrera').value.trim();
-        const descripcion  = document.getElementById('regAlumnoDescripcion').value.trim();
-        const telefono     = document.getElementById('regAlumnoTelefono').value.trim();
-        const mensaje      = document.getElementById('registerAlumnoMessage');
+        const colegio_id    = selectColegio.value ? Number(selectColegio.value) : null;
+        const selectCentro  = document.getElementById('regAlumnoCentro');
+        const centro_id     = selectCentro.value ? Number(selectCentro.value) : null;
+        const carrera       = document.getElementById('regAlumnoCarrera').value.trim();
+        const descripcion   = document.getElementById('regAlumnoDescripcion').value.trim();
+        const telefono      = document.getElementById('regAlumnoTelefono').value.trim();
+        const mensaje       = document.getElementById('registerAlumnoMessage');
         mensaje.textContent = "";
 
         if (!nombre || !apellido || !email || !password || !carrera || !colegio_id) {
@@ -138,6 +154,7 @@ function inicializarEventosAlumno() {
         }
 
         try {
+            // Paso 1: registrar alumno (JSON)
             const response = await fetch('/api/alumnos/registro', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -154,14 +171,42 @@ function inicializarEventosAlumno() {
                 })
             });
             const data = await response.json();
-            if (response.ok) {
-                mensaje.textContent = "¡Registro exitoso! Ya podés iniciar sesión.";
-                mensaje.style.color = "#0094d3";
-                setTimeout(ocultarRegistroAlumno, 1200);
-            } else {
+            if (!response.ok) {
                 mensaje.textContent = data.error || "Error en el registro.";
                 mensaje.style.color = "#d00";
+                return;
             }
+
+            // Intentamos obtener el ID del nuevo alumno
+            const nuevoId = data?.id ?? data?.user?.id ?? data?.alumnoId;
+            // Paso 2 (opcional): si hay archivos, subirlos con FormData a /api/upload
+            const fotoFile = document.getElementById('regAlumnoFoto')?.files?.[0] || null;
+            const cvFile   = document.getElementById('regAlumnoCV')?.files?.[0] || null;
+
+            if (nuevoId && (fotoFile || cvFile)) {
+                const fd = new FormData();
+                fd.append('userId', String(nuevoId));
+                if (fotoFile) fd.append('foto', fotoFile);
+                if (cvFile)   fd.append('cv', cvFile);
+
+                try {
+                    const upRes = await fetch('/api/upload', {
+                        method: 'POST',
+                        body: fd
+                    });
+                    const upData = await upRes.json();
+                    if (!upRes.ok || !upData?.success) {
+                        console.warn('Subida de archivos fallida/parcial:', upData);
+                    }
+                } catch (eUp) {
+                    console.warn('No se pudieron subir los archivos:', eUp);
+                }
+            }
+
+            mensaje.textContent = "¡Registro exitoso! Ya podés iniciar sesión.";
+            mensaje.style.color = "#0094d3";
+            setTimeout(ocultarRegistroAlumno, 1200);
+
         } catch (err) {
             mensaje.textContent = "Error de conexión al servidor.";
             mensaje.style.color = "#d00";
@@ -273,7 +318,7 @@ function inicializarEventosProfesor() {
     document.getElementById('loginProfesorForm').addEventListener('submit', async function(e) {
         e.preventDefault();
         const email = document.getElementById('loginProfesorEmail').value.trim();
-        const pass = document.getElementById('loginProfesorPassword').value;
+        thePass = document.getElementById('loginProfesorPassword').value;
         const mensaje = document.getElementById('loginProfesorMessage');
         mensaje.textContent = "";
 
@@ -281,7 +326,7 @@ function inicializarEventosProfesor() {
             const response = await fetch('/api/profesores/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password: pass })
+                body: JSON.stringify({ email, password: thePass })
             });
             const data = await response.json();
 
@@ -308,9 +353,6 @@ function inicializarEventosProfesor() {
 // 6) FUNCIONES PARA MODALES Y LOGOUT
 // ===========================================================
 function showLogin() {
-    // Si abrimos el modal desde index.html, solo mostrará el login de alumnos.
-    // Pero si quisieras abrir directamente el login de profesores, 
-    // podrías llamar a: mostrarSolo('Profesor'); showLoginProfesor(); 
     document.getElementById('loginModal').classList.remove('hidden');
 }
 
