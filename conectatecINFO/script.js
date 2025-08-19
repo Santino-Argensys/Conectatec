@@ -50,6 +50,75 @@ if (burger && menu){
   burger.addEventListener('click', ()=> menu.classList.toggle('open'));
 }
 
+<!-- PONER ESTO ANTES DE </body> (después de tu JS actual) -->
+<script>
+(() => {
+  // ====== Robot que sigue al mouse (cabeza recortada) ======
+  const robot = document.getElementById('robot');
+  const head  = document.getElementById('robotHead');
+  if (!robot || !head) return; // si aún no está en el DOM, salimos
+
+  let targetRX = 0, targetRY = 0;
+  let rx = 0, ry = 0;
+
+  const clamp = (v,a,b) => Math.max(a, Math.min(b, v));
+  const lerp  = (a,b,t) => a + (b - a) * t;
+
+  // Lee límites desde CSS custom properties (--max-yaw / --max-pitch)
+  const cssDeg = (name, fallback) => {
+    const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    return v.endsWith('deg') ? parseFloat(v) : fallback;
+  };
+  let MAX_YAW   = cssDeg('--max-yaw', 20);
+  let MAX_PITCH = cssDeg('--max-pitch', 10);
+
+  // Actualiza si cambian media queries
+  new ResizeObserver(() => {
+    MAX_YAW   = cssDeg('--max-yaw', 20);
+    MAX_PITCH = cssDeg('--max-pitch', 10);
+  }).observe(document.documentElement);
+
+  // Throttle sutil del mousemove (mejor perf que disparar cada evento)
+  let rafId = 0, pendingEvt = null;
+  function onPointerMove(e){
+    pendingEvt = e;
+    if (!rafId) rafId = requestAnimationFrame(applyPointer);
+  }
+  function applyPointer(){
+    rafId = 0;
+    if (!pendingEvt) return;
+    const e = pendingEvt; pendingEvt = null;
+
+    const r = robot.getBoundingClientRect();
+    const cx = r.left + r.width/2;
+    const cy = r.top  + r.height/2;
+
+    const nx = (e.clientX - cx) / (r.width/2);   // -1..1
+    const ny = (e.clientY - cy) / (r.height/2);  // -1..1
+
+    targetRY = clamp(nx * MAX_YAW,   -MAX_YAW,   MAX_YAW);
+    targetRX = clamp(-ny * MAX_PITCH,-MAX_PITCH, MAX_PITCH);
+  }
+
+  function animate(){
+    rx = lerp(rx, targetRX, 0.12);
+    ry = lerp(ry, targetRY, 0.12);
+    head.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg)`;
+    requestAnimationFrame(animate);
+  }
+
+  window.addEventListener('mousemove', onPointerMove, { passive:true });
+  window.addEventListener('touchmove', ev => {
+    const t = ev.touches && ev.touches[0];
+    if (!t) return;
+    onPointerMove({ clientX: t.clientX, clientY: t.clientY });
+  }, { passive:true });
+
+  animate();
+})();
+</script>
+
+
 // ====== Reveal on scroll ======
 const io = new IntersectionObserver((entries)=>{
   entries.forEach(e=>{
