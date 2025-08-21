@@ -1,0 +1,200 @@
+/* ================================
+   Conectatec – acceso.css
+   Aplica solo en <body class="acceso-bg">
+   Cargar DESPUÉS de style.css
+================================== */
+
+/* Paleta (usa tus vars si existen) */
+:root{
+  --primary: var(--violet-500, #8b5cf6);
+  --primary-600: var(--violet-600, #7c3aed);
+  --primary-700: var(--violet-700, #6d28d9);
+  --text: var(--gray-100, #f3f4f6);
+  --muted: var(--gray-400, #a3a7b3);
+  --bg-950: #0a0b12;
+  --card: rgba(255,255,255,0.04);
+  --card-border: rgba(255,255,255,0.08);
+  --ring: rgba(139,92,246,.45);
+}
+
+/* ===== Fondo y layout ===== */
+body.acceso-bg{
+  min-height: 100vh;
+  color: var(--text);
+  background:
+    radial-gradient(1000px 500px at 80% -10%, rgba(124,58,237,.18), rgba(124,58,237,0) 60%),
+    radial-gradient(800px 380px at 10% 25%, rgba(16,185,129,.12), rgba(16,185,129,0) 55%),
+    linear-gradient(180deg, #0b0c14 0%, #0b0b12 60%, #0a0a10 100%);
+  display: grid;
+  place-items: center;
+  padding: clamp(24px, 4vw, 48px);
+  overflow-x: hidden;
+}
+
+/* puntitos sutiles de fondo */
+body.acceso-bg::before{
+  content:"";
+  position: fixed;
+  inset: 0;
+  background-image: radial-gradient(#ffffff33 1px, transparent 1px);
+  background-size: 22px 22px;
+  opacity: .08;
+  pointer-events: none;
+}
+
+/* ===== Card principal ===== */
+.acceso-container{
+  width: min(480px, 94vw);
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 22px;
+  padding: clamp(20px, 5vw, 32px);
+  box-shadow:
+    0 20px 80px rgba(0,0,0,.55),
+    0 0 0 1px rgba(255,255,255,.03) inset;
+  backdrop-filter: blur(10px);
+}
+
+/* “glow” detrás de la card */
+.acceso-container::before{
+  content:"";
+  position:absolute;
+  filter: blur(60px);
+  inset: auto;
+  width: 60%;
+  height: 40%;
+  left: 20%;
+  bottom: -10%;
+  background: radial-gradient(closest-side, var(--primary-700), transparent);
+  opacity: .25;
+  z-index:-1;
+}
+
+/* ===== Logo y títulos ===== */
+.acceso-logo{
+  display:block;
+  margin: 4px auto 12px;
+  width: clamp(90px, 30%, 120px);
+  filter: drop-shadow(0 6px 18px rgba(139,92,246,.25));
+}
+
+.acceso-titulo{
+  text-align:center;
+  font-size: clamp(1.4rem, 2.3vw, 1.8rem);
+  letter-spacing:.2px;
+  margin: 4px 0 14px;
+}
+
+/* ===== Tabs ===== */
+.tabs{
+  display:flex; gap:10px; justify-content:center;
+  background: rgba(255,255,255,.03);
+  border:1px solid var(--card-border);
+  border-radius: 14px;
+  padding: 6px;
+  margin: 8px 0 18px;
+}
+.tab-btn{
+  appearance:none;
+  border:0;
+  padding:10px 14px;
+  border-radius:10px;
+  color: var(--muted);
+  background: transparent;
+  font-weight: 600;
+  cursor:pointer;
+  transition: transform .06s ease, background .2s ease, color .2s ease;
+}
+.tab-btn:hover{ color: #e8e9ef; }
+.tab-btn.active{
+  color: #fff;
+  background: linear-gradient(180deg, var(--primary) 0%, var(--primary-700) 100%);
+  box-shadow: 0 8px 24px rgba(139,92,246,.35);
+  transform: translateY(-1px);
+}
+
+/* ===== Formularios ===== */
+.acceso-form{
+  display:grid;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.acceso-form input,
+.acceso-form select{
+  width:100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border:1px solid rgba(255,255,255,.06);
+  background: rgba(17,17,25,.65);
+  color: var(--text);
+  outline: none;
+  transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
+}
+.acceso-form input::placeholder{ color: #b8bcc9; opacity:.75; }
+
+.acceso-form input:focus,
+.acceso-form select:focus{
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px var(--ring);
+  background: rgba(20,20,30,.85);
+}
+
+/* labels y previsualizaciones */
+.acceso-label{
+  font-size: .9rem;
+  color: var(--muted);
+  margin-top: 6px;
+}
+.avatar-preview{
+  border:1px solid rgba(255,255,255,.08);
+  box-shadow: 0 10px 30px rgba(0,0,0,.35);
+}
+
+/* ===== Botones ===== */
+.primary-btn.acceso-btn{
+  width:100%;
+  border:0;
+  cursor:pointer;
+  font-weight:700;
+  padding: 12px 16px;
+  border-radius: 12px;
+  color:#fff;
+  background: linear-gradient(180deg, var(--primary) 0%, var(--primary-700) 100%);
+  box-shadow: 0 14px 30px rgba(139,92,246,.35), 0 0 0 1px rgba(255,255,255,.06) inset;
+  transition: transform .08s ease, box-shadow .2s ease, filter .2s ease;
+}
+.primary-btn.acceso-btn:hover{
+  filter: brightness(1.06);
+  box-shadow: 0 18px 40px rgba(139,92,246,.45);
+}
+.primary-btn.acceso-btn:active{ transform: translateY(1px); }
+
+/* ===== Mensajes, links y utilidades ===== */
+.acceso-msg{
+  margin-top: 6px;
+  font-size: .95rem;
+  color: #c7cbe0;
+  min-height: 1.2em;
+}
+
+.acceso-link{
+  text-align:center;
+  color: var(--muted);
+  margin-top: 4px;
+}
+.acceso-link a{
+  color: var(--primary);
+  font-weight: 600;
+  text-decoration: none;
+}
+.acceso-link a:hover{ text-decoration: underline; }
+
+.hidden{ display: none !important; }
+
+/* ===== Responsive tweaks ===== */
+@media (max-width: 420px){
+  .tabs{ padding:5px; gap:6px; }
+  .tab-btn{ padding:9px 10px; font-size:.95rem; }
+  .acceso-container{ padding: 18px; border-radius:18px; }
+}
