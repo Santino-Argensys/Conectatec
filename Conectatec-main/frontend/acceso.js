@@ -69,6 +69,26 @@ document.addEventListener('DOMContentLoaded', () => {
     inicializarEventosAlumno();
     inicializarEventosProfesor();
 
+    // === Enlaces de ALUMNO (mostrar/ocultar registro) ===
+document.getElementById('linkRegistroAlumno')?.addEventListener('click', (e)=>{
+  e.preventDefault();
+  window.mostrarRegistroAlumno();
+});
+document.getElementById('linkVolverLoginAlumno')?.addEventListener('click', (e)=>{
+  e.preventDefault();
+  window.ocultarRegistroAlumno();
+});
+
+// === Enlaces de PROFESOR/EMPRESA (mostrar/ocultar registro) ===
+document.getElementById('linkRegistroProfesor')?.addEventListener('click', (e)=>{
+  e.preventDefault();
+  window.mostrarRegistroProfesor();
+});
+document.getElementById('linkVolverLoginProfesor')?.addEventListener('click', (e)=>{
+  e.preventDefault();
+  window.ocultarRegistroProfesor();
+});
+
     // Preview de la foto (si el input existe en el HTML)
     const fotoInput = document.getElementById('regAlumnoFoto');
     const fotoPreview = document.getElementById('regAlumnoFotoPreview');
@@ -381,3 +401,4 @@ function logout() {
     localStorage.removeItem('usuarioConectatec');
     window.location.href = "acceso.html";
 }
+
