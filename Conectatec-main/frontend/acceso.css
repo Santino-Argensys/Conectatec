@@ -3,7 +3,12 @@
    Se aplica sobre <body class="acceso-bg">
    Cargar DESPUÉS de style.css
 ================================== */
-
+/* canvas de partículas detrás de todo */
+#bg{
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+}
 /* mismas variables del index (con fallback) */
 :root{
   --bg: #07070c;
