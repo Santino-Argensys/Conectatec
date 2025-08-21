@@ -75,6 +75,8 @@ body.acceso-bg::before{
   -webkit-background-clip:text; background-clip:text; color:transparent;
 }
 
+.hidden { display: none !important; }
+
 /* ===== Tabs (píldoras) ===== */
 .tabs{
   display:flex; gap:10px; justify-content:center;
